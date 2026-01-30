@@ -1,0 +1,147 @@
+You are a senior React frontend engineer.
+
+I have already imported a complete React project ZIP into Replit.
+
+Important rules:
+- DO NOT change existing business logic
+- DO NOT modify role-based conditions
+- DO NOT remove any API calls
+- ONLY restructure the project professionally
+- Keep all current functionality working
+
+Tech stack:
+- React with Vite
+- Bootstrap 5
+- Plain CSS files (already present)
+- react-router-dom
+
+Application contains these modules:
+- Login
+- Dashboard
+- Leads
+  - Add Lead
+  - Edit Lead
+- Customers
+  - Customer List
+  - Customer Details
+  - Add Customer
+  - Edit Customer
+- Tasks
+  - Add Task
+- Settings
+- Role-based access (Admin, Manager, User)
+
+--------------------------------------------------
+
+🎯 OBJECTIVE:
+Convert the project into an industry-standard React + Vite architecture
+without breaking any existing logic.
+
+--------------------------------------------------
+
+📁 REQUIRED INDUSTRIAL STRUCTURE:
+
+src/
+│
+├── assets/
+│   ├── images/
+│   └── icons/
+│
+├── components/
+│   ├── common/
+│   │   ├── Navbar.jsx
+│   │   ├── Sidebar.jsx
+│   │   └── Footer.jsx
+│   │
+│   ├── auth/
+│   │   ├── Login.jsx
+│   │   └── auth.css
+│   │
+│   ├── dashboard/
+│   │   ├── Dashboard.jsx
+│   │   └── Dashboard.css
+│   │
+│   ├── leads/
+│   │   ├── LeadList.jsx
+│   │   ├── AddLead.jsx
+│   │   ├── EditLead.jsx
+│   │   └── Lead.css
+│   │
+│   ├── customers/
+│   │   ├── CustomerList.jsx
+│   │   ├── CustomerDetails.jsx
+│   │   ├── AddCustomer.jsx
+│   │   ├── EditCustomer.jsx
+│   │   └── Customer.css
+│   │
+│   ├── tasks/
+│   │   ├── TaskList.jsx
+│   │   ├── AddTask.jsx
+│   │   └── Task.css
+│   │
+│   └── settings/
+│       ├── Settings.jsx
+│       └── Settings.css
+│
+├── pages/
+│   ├── Home.jsx
+│   └── NotFound.jsx
+│
+├── routes/
+│   ├── AppRoutes.jsx
+│   └── ProtectedRoute.jsx
+│
+├── services/
+│   └── api.js
+│
+├── utils/
+│   └── auth.js
+│
+├── App.jsx
+├── main.jsx
+└── index.css
+
+--------------------------------------------------
+
+🔐 ROLE-BASED ACCESS REQUIREMENTS:
+
+Roles:
+- ADMIN
+- MANAGER
+- USER
+
+Rules:
+- Admin → full access
+- Manager → cannot access admin-only data
+- User → can see only own leads, customers, tasks
+
+Role logic MUST remain exactly as already implemented.
+Only move code to correct files.
+
+--------------------------------------------------
+
+Routing rules:
+- All routing must be inside AppRoutes.jsx
+- Use ProtectedRoute for role-based access
+- Login page should be public
+- All other pages must require authentication
+
+--------------------------------------------------
+
+Bootstrap rules:
+- Import Bootstrap CSS only in main.jsx
+- Use Bootstrap grid system
+- Use Bootstrap components (card, table, modal, buttons)
+- No Tailwind
+- No inline CSS
+
+--------------------------------------------------
+
+Final output should:
+- Compile without errors
+- Maintain existing logic
+- Follow real company React architecture
+- Be clean, readable and professional
+- Suitable for college project submission
+
+Act as if this is a CRM system used in a real company.

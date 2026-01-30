@@ -1,0 +1,273 @@
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.tasks-header h1 {
+  margin-bottom: 4px;
+}
+
+.tasks-header p {
+  color: #9aa4af;
+  font-size: 14px;
+}
+
+.add-task-btn {
+  background: #3ef08c;
+  color: #000;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.add-task-btn:hover {
+  background: #34d97c;
+}
+
+.task-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-buttons button {
+  background: #152a20;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.filter-buttons button.active {
+  background: #3ef08c;
+  color: #000;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.task-item {
+  background: #152a20;
+  padding: 18px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.task-left h4 {
+  margin-bottom: 4px;
+}
+
+.task-left p {
+  font-size: 13px;
+  color: #9aa4af;
+}
+
+.task-checkbox input {
+  display: none;
+}
+
+.task-checkbox span {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #3ef08c;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-checkbox input:checked + span {
+  background: #3ef08c;
+}
+
+.task-checkbox input:checked + span::after {
+  content: "✓";
+  font-size: 12px;
+  color: black;
+}
+
+.task-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.priority {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.priority.high {
+  background: #7f1d1d;
+  color: #f87171;
+}
+
+.priority.medium {
+  background: #78350f;
+  color: #facc15;
+}
+
+.priority.low {
+  background: #1e3a8a;
+  color: #93c5fd;
+}
+
+.date {
+  color: #9aa4af;
+  font-size: 13px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 30px;
+}
+
+.pagination button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #152a20;
+  color: white;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #3ef08c;
+  color: black;
+}
+
+.add-task-wrapper {
+  max-width: 600px;
+}
+
+.add-task-form {
+  background: #152a20;
+  padding: 30px;
+  border-radius: 18px;
+  margin-top: 20px;
+}
+
+.add-task-form label {
+  display: block;
+  font-size: 13px;
+  color: #9aa4af;
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+
+.add-task-form label:first-child {
+  margin-top: 0;
+}
+
+.add-task-form input,
+.add-task-form select,
+.add-task-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: #0f1f17;
+  border: 1px solid #1f3a2b;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+}
+
+.add-task-form textarea {
+  min-height: 80px;
+  resize: none;
+}
+
+.add-task-form .two-col {
+  display: flex;
+  gap: 14px;
+}
+
+.add-task-form .two-col > div {
+  flex: 1;
+}
+
+.task-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.edit-task-wrapper {
+  min-height: 100vh;
+  background: #0b1510;
+  padding: 30px;
+  color: white;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.edit-task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.edit-task-form {
+  max-width: 500px;
+  margin: 0 auto;
+  background: #152a20;
+  padding: 30px;
+  border-radius: 18px;
+}
+
+.edit-task-form label {
+  display: block;
+  font-size: 13px;
+  color: #9aa4af;
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+
+.edit-task-form label:first-child {
+  margin-top: 0;
+}
+
+.edit-task-form input,
+.edit-task-form select,
+.edit-task-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: #0f1f17;
+  border: 1px solid #1f3a2b;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+}
+
+.edit-task-form textarea {
+  min-height: 80px;
+  resize: none;
+}
