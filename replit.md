@@ -59,9 +59,14 @@ src/
 │   │   ├── AddTask.jsx
 │   │   ├── EditTask.jsx
 │   │   └── Task.css
-│   └── settings/
-│       ├── Settings.jsx
-│       └── Settings.css
+│   ├── settings/
+│   │   ├── Settings.jsx
+│   │   └── Settings.css
+│   └── kanban/
+│       ├── KanbanBoard.jsx
+│       ├── KanbanColumn.jsx
+│       ├── KanbanCard.jsx
+│       └── Kanban.css
 ├── context/
 │   └── RoleContext.jsx
 ├── pages/
@@ -88,6 +93,7 @@ The project follows a modular component structure organized by feature:
 - `src/components/customers/` - Customer management components
 - `src/components/tasks/` - Task management components
 - `src/components/settings/` - Settings and profile components
+- `src/components/kanban/` - Reusable Kanban board components (KanbanBoard, KanbanColumn, KanbanCard)
 
 Each feature folder contains its own CSS file for styling encapsulation.
 
@@ -154,6 +160,11 @@ Each feature folder contains its own CSS file for styling encapsulation.
 ## Recent Changes
 
 ### January 30, 2026
+- Added Kanban board view for Leads and Tasks with toggle between Table and Kanban views
+- Created reusable Kanban components (KanbanBoard, KanbanColumn, KanbanCard) in `src/components/kanban/`
+- Implemented localStorage persistence for leads and tasks data
+- Status changes via dropdown in Kanban cards automatically persist
+- Kanban columns: Leads (New, Contacted, Follow Up, Converted, Lost), Tasks (To Do, In Progress, Completed)
 - Restructured project from flat CRA structure to industry-standard Vite architecture
 - Created modular component organization with feature-based folders
 - Implemented centralized routing with AppRoutes.jsx and ProtectedRoute.jsx
