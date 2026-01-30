@@ -134,6 +134,27 @@
   color: #93c5fd;
 }
 
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.status-badge.to-do {
+  background: #1e3a8a;
+  color: #93c5fd;
+}
+
+.status-badge.in-progress {
+  background: #78350f;
+  color: #facc15;
+}
+
+.status-badge.completed {
+  background: #166534;
+  color: #86efac;
+}
+
 .date {
   color: #9aa4af;
   font-size: 13px;

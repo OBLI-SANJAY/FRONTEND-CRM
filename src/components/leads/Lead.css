@@ -84,6 +84,26 @@
   color: #facc15;
 }
 
+.badge.contacted {
+  background: #78350f;
+  color: #facc15;
+}
+
+.badge.follow-up {
+  background: #7c2d12;
+  color: #fb923c;
+}
+
+.badge.converted {
+  background: #166534;
+  color: #86efac;
+}
+
+.badge.lost {
+  background: #7f1d1d;
+  color: #f87171;
+}
+
 .actions-cell {
   position: relative;
 }
