@@ -2,16 +2,164 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  /* Modern font stack */
+}
+
+:root {
+  /* Common Variables */
+  --radius-main: 16px;
+  /* Increased radius for modern look */
+  --green-primary: #059669;
+  --green-hover: #047857;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --todo: #6b7280;
+  --in-progress: #3b82f6;
+  --completed: #10b981;
+  --shadow-main: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Default (Dark) Theme - Professional Slate/Gray */
+  --bg-main: #0f172a;
+  /* Slate 900 */
+  --bg-sidebar: #1e293b;
+  /* Slate 800 */
+  --bg-card: #1e293b;
+  /* Slate 800 */
+  --bg-card-hover: #334155;
+  /* Slate 700 */
+  --border-soft: #334155;
+  --text-main: #f8fafc;
+  /* Slate 50 */
+  --text-secondary: #bbc6d6;
+  /* Slate 400 */
+  --text-muted: #c2cddd;
+  /* Slate 500 */
+  --btn-disabled: #0f172a;
+  --success-bg: #064e3b;
+  --navbar-bg: #1e293b;
+  --input-bg: #0f172a;
+  --white: #ffffff;
+  --close-btn-filter: invert(1);
+  --bg-kanban-column: #f1f5f9;
+  --bg-kanban-card: #ffffff;
+}
+
+[data-theme='dark'] {
+  --bg-main: #0f172a;
+  --bg-sidebar: #1e293b;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --border-soft: #334155;
+  --text-main: #f8fafc;
+  --text-secondary: #bbc6d6;
+  --text-muted: #c2cddd;
+  --btn-disabled: #0f172a;
+  --success-bg: #064e3b;
+  --input-bg: #0f172a;
+  --white: #ffffff;
+  --close-btn-filter: invert(1);
+  --bg-kanban-column: #0b1120;
+  /* Darker than card */
+  --bg-kanban-card: #1e293b;
+  /* Same as card/sidebar */
+}
+
+[data-theme='light'] {
+  --bg-main: #b5bdc5;
+  /* Slate 100 - Premium Light Gray */
+  --bg-sidebar: #ffffff;
+  --bg-card: #b8caca;
+  --bg-card-hover: #f8fafc;
+  /* Slate 50 */
+  --border-soft: #e2e8f0;
+  /* Slate 200 */
+  --text-main: #0f172a;
+  /* Slate 900 */
+  --text-secondary: #475569;
+  /* Slate 600 */
+  --text-muted: #64748b;
+  /* Slate 500 */
+  --btn-disabled: #f1f5f9;
+  --success-bg: #ecfdf5;
+  /* Emerald 50 */
+  --navbar-bg: #ffffff;
+  --input-bg: #f8fafc;
+  --white: #ffffff;
+  --close-btn-filter: none;
+  --green-primary: #059669;
+  --green-hover: #047857;
+  --shadow-main: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  /* Softer shadow */
+  --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  --bg-kanban-column: #e2e8f0;
+  /* Distinct from page bg */
+  --bg-kanban-card: #ffffff;
 }
 
 body {
-  background-color: #0b0f14;
-  color: white;
+  background-color: var(--bg-main);
+  color: var(--text-secondary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+[data-theme='light'] body {
+  background: var(--bg-main);
+  background-attachment: fixed;
+}
+
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  color: var(--text-main);
+  font-weight: 700;
+  /* Bolder headings */
+  letter-spacing: -0.025em;
+  /* Tight tracking */
+}
+
+.text-main {
+  color: var(--text-main) !important;
+}
+
+.text-muted,
+.text-secondary {
+  color: var(--text-muted) !important;
+}
+
+.mb-0 {
+  color: inherit !important;
 }
 
 button:hover {
   cursor: pointer;
+}
+
+button:disabled {
+  background-color: var(--btn-disabled) !important;
+  border-color: var(--btn-disabled) !important;
+  color: var(--text-muted) !important;
+  cursor: not-allowed;
 }
 
 a {
@@ -19,19 +167,344 @@ a {
   color: inherit;
 }
 
+/* Refined Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b1510;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f3a2b;
-  border-radius: 4px;
+  background: var(--border-soft);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3ef08c;
+  background: var(--text-muted);
+}
+
+/* Buttons & Components */
+.btn-primary,
+.btn-primary:active,
+.btn-primary:visited,
+.btn-success {
+  background: linear-gradient(135deg, var(--green-primary), var(--green-hover)) !important;
+  /* Gradient Effect */
+  border: none !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-success:hover {
+  filter: brightness(110%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.3);
+}
+
+.card {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-main);
+  border-radius: var(--radius-main) !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Hover effect only for interactive cards */
+.highlight-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--green-primary);
+}
+
+.list-group-item {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-soft) !important;
+  color: var(--text-main) !important;
+  /* Was text-secondary, changing to text-main for visibility */
+}
+
+/* Table Styles - Fixed Visibility */
+.table {
+  --bs-table-bg: transparent !important;
+  --bs-table-striped-bg: transparent !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-soft) !important;
+  margin-bottom: 0;
+  overflow: visible !important;
+  /* Allow dropdowns to spill out */
+}
+
+.table-responsive {
+  overflow: visible !important;
+  /* Warning: this might break scroll on small screens, but fixes dropdown clipping. A better fix is portals, but this is a quick CSS fix requested. */
+}
+
+.table th {
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-soft) !important;
+  padding: 16px;
+  background-color: var(--bg-card);
+}
+
+.table td {
+  padding: 16px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-main);
+  /* Ensure main text is visible */
+}
+
+.table-hover>tbody>tr:hover>* {
+  --bs-table-accent-bg: var(--bg-card-hover) !important;
+  color: var(--text-main);
+}
+
+/* Kanban Improvements */
+.kanban-container {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 4px 0 24px 0;
+  height: calc(100vh - 280px);
+  /* Height adjustment */
+  min-height: 500px;
+  align-items: flex-start;
+}
+
+/* Hide scrollbar for clean look but keep functionality */
+.kanban-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.kanban-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanban-container::-webkit-scrollbar-thumb {
+  background-color: var(--border-soft);
+  border-radius: 20px;
+}
+
+.kanban-column {
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  min-width: 320px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-main);
+  max-height: 100%;
+}
+
+/* Ensure the column is HIDDEN when filtered out - this will be controlled by React, but CSS helps transition */
+.kanban-column.hidden {
+  display: none;
+}
+
+
+/* Modern Inputs */
+.form-control,
+.form-select {
+  background-color: var(--input-bg) !important;
+  border: 1px solid var(--border-soft) !important;
+  color: var(--text-main) !important;
+  border-radius: 8px !important;
+  border-radius: 8px !important;
+  border-radius: 8px !important;
+  padding: 8px 12px;
+}
+
+::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+}
+
+/* Ensure text is visible in inputs */
+input,
+select,
+textarea {
+  color: var(--text-main) !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--green-primary) !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Search Input Wrapper */
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 320px;
+  /* Limit width */
+}
+
+.search-wrapper svg {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.search-wrapper input {
+  padding-left: 40px;
+  /* Space for icon */
+}
+
+/* Nav Pills */
+.nav-pills .nav-link {
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 10px 16px;
+  transition: all 0.2s;
+}
+
+.nav-pills .nav-link.active {
+  background-color: rgba(5, 150, 105, 0.1) !important;
+  /* Subtle background */
+  color: var(--green-primary) !important;
+  border-radius: 8px;
+}
+
+.nav-pills .nav-link:hover:not(.active) {
+  background-color: var(--bg-card-hover) !important;
+  color: var(--text-main);
+}
+
+/* Custom Buttons Group */
+.btn-group-custom {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  border: 1px solid var(--border-soft);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 50px;
+  /* Pill shape */
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.btn-custom:hover {
+  border-color: var(--green-primary);
+  color: var(--text-main);
+  background: var(--bg-card-hover);
+}
+
+.btn-custom.active {
+  background: var(--green-primary);
+  border-color: var(--green-primary);
+  color: white !important;
+}
+
+.btn-custom svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.5;
+}
+
+/* Badges */
+.badge {
+  padding: 0.5em 0.8em;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  border-radius: 6px;
+}
+
+/* Edit/Save Button - Professional Gradient */
+.edit-btn {
+  background: linear-gradient(135deg, var(--green-primary), var(--green-hover)) !important;
+  color: white !important;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-btn:hover {
+  filter: brightness(110%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+}
+
+.edit-btn:active {
+  transform: translateY(0);
+}
+
+.bottom-100 {
+  bottom: 100% !important;
+}
+
+/* Custom Tooltip */
+.tooltip-container {
+  position: relative;
+}
+
+.custom-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  width: 160px;
+  background-color: var(--bg-sidebar);
+  color: var(--text-main);
+  text-align: center;
+  border-radius: 8px;
+  padding: 8px;
+  position: absolute;
+  z-index: 10;
+  bottom: 110%;
+  /* Above the element */
+  left: 50%;
+  transform: translateX(-50%) translateY(5px);
+  box-shadow: var(--shadow-hover);
+  border: 1px solid var(--border-soft);
+  font-size: 0.75rem;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+
+.tooltip-container:hover .custom-tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.custom-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--border-soft) transparent transparent transparent;
 }

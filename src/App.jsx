@@ -1,12 +1,15 @@
 import React from "react";
 import { RoleProvider } from "./context/RoleContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   return (
-    <RoleProvider>
-      <AppRoutes />
-    </RoleProvider>
+    <ThemeProvider>
+      <RoleProvider>
+        <AppRoutes />
+      </RoleProvider>
+    </ThemeProvider>
   );
 }
 

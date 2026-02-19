@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Footer from "../components/common/Footer";
 
 function Home() {
   return (
-    <div className="bg-dark text-white min-vh-100">
+    <div className="bg-dark text-white">
       <header className="border-bottom border-success">
         <div className="container d-flex justify-content-between align-items-center py-3">
           <div className="d-flex align-items-center gap-2">
@@ -21,26 +22,26 @@ function Home() {
       </header>
 
       <main className="container py-5">
-        <h1 className="mb-3">
+        <h1 className="mb-3 text-white">
           Build Stronger Customer Relationships with ClientConnect
         </h1>
 
-        <p className="text-secondary mb-5">
+        <p className="text-white-50 mb-5">
           ClientConnect is a modern CRM platform to manage leads, customers,
           tasks, and growth — all in one place.
         </p>
 
         <section className="mb-5">
-          <h4>Who We Are</h4>
-          <p className="text-secondary">
+          <h4 className="text-white">Who We Are</h4>
+          <p className="text-white-50">
             ClientConnect helps businesses manage leads, follow-ups,
             and customer data without chaos.
           </p>
         </section>
 
         <section className="mb-5">
-          <h4>What ClientConnect Helps You Do</h4>
-          <ul className="text-secondary">
+          <h4 className="text-white">What ClientConnect Helps You Do</h4>
+          <ul className="text-white-50">
             <li>Capture and convert leads</li>
             <li>Organize customer data</li>
             <li>Track tasks and deadlines</li>
@@ -49,8 +50,8 @@ function Home() {
         </section>
 
         <section className="bg-success bg-opacity-10 p-4 rounded text-center">
-          <h4>Get Started with ClientConnect</h4>
-          <p className="text-secondary">
+          <h4 className="text-white">Get Started with ClientConnect</h4>
+          <p className="text-white-50">
             Join businesses already boosting productivity.
           </p>
           <Link to="/signup" className="btn btn-success rounded-pill px-4">
@@ -58,6 +59,8 @@ function Home() {
           </Link>
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 }

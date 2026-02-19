@@ -1,133 +1,193 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import Sidebar from "../common/Sidebar";
-import "./Lead.css";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import leadService from "../../services/leadService";
 
 function LeadDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [lead, setLead] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const leads = [
-    {
-      id: 1,
-      name: "Sarah Jenkins",
-      role: "Product Manager",
-      company: "TechFlow Inc.",
-      email: "sarah@techflow.com",
-      phone: "+1 555 123 4567",
-      location: "San Francisco, CA",
-      status: "New",
-      netWorth: "$1.2M",
-      expectedDeal: "$45,000",
-      usefulness:
-        "Decision maker with strong influence on SaaS purchases. High probability of long-term partnership.",
-      engagement: "High",
-      avatar: "https://i.pravatar.cc/150?img=32",
-    },
-    {
-      id: 2,
-      name: "Mike Ross",
-      role: "Legal Consultant",
-      company: "Pearson Hardman",
-      email: "mross@pearson.com",
-      phone: "+1 555 987 6543",
-      location: "New York, NY",
-      status: "Negotiation",
-      netWorth: "$3.5M",
-      expectedDeal: "$120,000",
-      usefulness:
-        "Represents multiple enterprise clients. Potential gateway to bulk contracts.",
-      engagement: "Medium",
-      avatar: "https://i.pravatar.cc/150?img=12",
-    },
-  ];
+  useEffect(() => {
+    fetchLead();
+  }, [id]);
 
-  const lead = leads.find((l) => l.id === Number(id));
+  const fetchLead = async () => {
+    try {
+      setIsLoading(true);
+      const data = await leadService.getLeadById(id);
+      setLead(data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to fetch lead details.");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEmailClick = () => {
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${lead.email}`, "_blank");
+  };
+
+  const formatCurrency = (value) => {
+    if (value === undefined || value === null) return "₹0";
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+
+  const getValueBadge = (netWorth) => {
+    if (netWorth >= 10000000) {
+      return <span className="badge bg-success">High Value Lead</span>;
+    } else if (netWorth >= 2500000) {
+      return <span className="badge bg-warning text-dark">Medium Value Lead</span>;
+    } else {
+      return <span className="badge bg-secondary">Low Value Lead</span>;
+    }
+  };
+
+  const getStatusClass = (status) => {
+    const s = status ? status.toUpperCase() : "";
+    switch (s) {
+      case "NEW": return "bg-primary";
+      case "CONTACTED": return "bg-info text-dark";
+      case "FOLLOW_UP": return "bg-warning text-dark";
+      case "QUALIFIED": return "bg-success";
+      case "WON": return "bg-success";
+      case "LOST": return "bg-danger";
+      default: return "bg-secondary";
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="container-fluid d-flex justify-content-center align-items-center h-100">
+        <div className="text-primary h4">Loading lead details...</div>
+      </div>
+    );
+  }
 
   if (!lead) {
     return (
-      <div style={{ padding: 40 }}>
-        <h2>Lead not found</h2>
-        <button onClick={() => navigate("/leads")}>Back to Leads</button>
+      <div className="container-fluid text-center mt-5">
+        <h2 className="text-primary">Lead Not Found</h2>
+        <p className="text-secondary">The lead you are looking for does not exist or has been removed.</p>
+        <button className="btn btn-primary mt-3" onClick={() => navigate("/leads")}>
+          Back to Leads
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-container">
-      <Sidebar />
+    <div className="container-fluid">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb mb-0">
+            <li className="breadcrumb-item">
+              <Link to="/leads" className="text-decoration-none text-secondary">Leads</Link>
+            </li>
+            <li className="breadcrumb-item active text-white" aria-current="page">
+              {lead.name}
+            </li>
+          </ol>
+        </nav>
+        <button className="btn btn-outline-secondary btn-sm" onClick={() => navigate("/leads")}>
+          ← Back
+        </button>
+      </div>
 
-      <main className="dashboard-content">
-        <div className="page-top">
-          <div className="breadcrumb">
-            Leads <span>›</span> {lead.name}
-          </div>
-
-          <button className="back-btn" onClick={() => navigate("/leads")}>
-            ← Back to Leads
-          </button>
-        </div>
-
-        <h1 className="page-title">Lead Details</h1>
-        <p className="subtitle">Business potential and engagement overview</p>
-
-        <div className="details-grid">
-          <div className="profile-card">
-            <img src={lead.avatar} alt={lead.name} className="profile-img" />
-            <h3>{lead.name}</h3>
-            <p className="role">{lead.role}</p>
-
-            <span className={`badge ${lead.status.toLowerCase()}`}>
-              {lead.status}
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3 card bg-dark border-secondary p-4">
+        <div>
+          <h1 className="h3 mb-1 text-white">{lead.name}</h1>
+          <div className="d-flex gap-2 align-items-center mt-2">
+            <span className={`badge ${getStatusClass(lead.stage)}`}>{lead.stage}</span>
+            <span className={`badge ${lead.priority === 'HOT' ? 'bg-danger' : lead.priority === 'WARM' ? 'bg-warning text-dark' : 'bg-info text-dark'}`}>
+              {lead.priority || 'NORMAL'} Priority
             </span>
-
-            <div className="stats-row">
-              <div>
-                <p>Net Worth</p>
-                <h4>{lead.netWorth}</h4>
-              </div>
-              <div>
-                <p>Expected Deal</p>
-                <h4>{lead.expectedDeal}</h4>
-              </div>
-            </div>
-          </div>
-
-          <div className="card">
-            <h4>Lead Information</h4>
-
-            <div className="info-item">
-              <label>Company</label>
-              <p>{lead.company}</p>
-            </div>
-
-            <div className="info-item">
-              <label>Email</label>
-              <p>{lead.email}</p>
-            </div>
-
-            <div className="info-item">
-              <label>Phone</label>
-              <p>{lead.phone}</p>
-            </div>
-
-            <div className="info-item">
-              <label>Location</label>
-              <p>{lead.location}</p>
-            </div>
-
-            <div className="info-item">
-              <label>Engagement Level</label>
-              <p>{lead.engagement}</p>
-            </div>
-          </div>
-
-          <div className="activity-card">
-            <h4>Why This Lead Is Valuable</h4>
-            <p className="lead-note">{lead.usefulness}</p>
           </div>
         </div>
-      </main>
+        <div className="d-flex gap-2">
+          <button onClick={handleEmailClick} className="btn btn-primary">Email</button>
+          <button className="btn btn-outline-light" onClick={() => alert(`Calling ${lead.name}...`)}>Call</button>
+        </div>
+      </div>
+
+      <div className="row g-4">
+        <div className="col-lg-6">
+          <div className="card h-100 bg-dark border-secondary">
+            <div className="card-header border-secondary bg-transparent">
+              <h5 className="mb-0 text-white">Personal Information</h5>
+            </div>
+            <div className="card-body">
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="text-muted small d-block">Full Name</label>
+                  <span className="fw-medium text-white">{lead.name}</span>
+                </div>
+                <div className="col-md-6">
+                  <label className="text-muted small d-block">Email Address</label>
+                  <span className="fw-medium text-white">{lead.email}</span>
+                </div>
+                <div className="col-md-6">
+                  <label className="text-muted small d-block">Phone Number</label>
+                  <span className="fw-medium text-white">{lead.phone}</span>
+                </div>
+                <div className="col-md-6">
+                  <label className="text-muted small d-block">Company</label>
+                  <span className="fw-medium text-white">{lead.company}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-lg-6">
+          <div className="card h-100 bg-dark border-secondary">
+            <div className="card-header border-secondary bg-transparent">
+              <h5 className="mb-0 text-white">Assignment Details</h5>
+            </div>
+            <div className="card-body">
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="text-muted small d-block">Assigned To</label>
+                  <span className="fw-medium text-white">{lead.assignedTo || "Unassigned"}</span>
+                </div>
+                <div className="col-md-6">
+                  <label className="text-muted small d-block">Assigned By</label>
+                  <span className="fw-medium text-white">{lead.assignedBy || "System"}</span>
+                </div>
+                <div className="col-md-6">
+                  <label className="text-muted small d-block">Role</label>
+                  <span className="fw-medium text-white">{lead.assignedRole || "N/A"}</span>
+                </div>
+                <div className="col-md-6">
+                  <label className="text-muted small d-block">Created At</label>
+                  <span className="fw-medium text-white">
+                    {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "N/A"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row mt-4">
+        <div className="col-12">
+          <div className="card bg-dark border-secondary">
+            <div className="card-body">
+              <h6 className="text-muted text-uppercase small mb-3">System Notes</h6>
+              <p className="mb-0 text-secondary">
+                {lead.notes || "No additional notes for this lead."}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
