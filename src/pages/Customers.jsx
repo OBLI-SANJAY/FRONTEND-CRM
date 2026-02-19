@@ -4,10 +4,6 @@ import AddCustomer from "../components/customers/AddCustomer";
 import customerService from "../services/customerService";
 import { getRole } from "../utils/auth";
 
-/**
- * Customers Page Component
- * Centralizes customer state, search handling, and RBAC visibility.
- */
 function Customers() {
     const [customers, setCustomers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -15,8 +11,6 @@ function Customers() {
     const [showAddForm, setShowAddForm] = useState(false);
 
     const role = getRole();
-
-    // Search Logic
     const [searchKeyword, setSearchKeyword] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const debounceTimerRef = useRef(null);
@@ -25,13 +19,7 @@ function Customers() {
         try {
             setLoading(true);
             setError(null);
-
-            // Note: Backend currently returns all filtered by role via /api/customers
-            // If a search endpoint exists for customers, we use it here.
-            // For now, filtering is role-based on backend.
             const data = await customerService.getAllCustomers();
-
-            // Frontend keyword filtering if search is active
             let filteredData = data || [];
             if (keyword.trim()) {
                 setIsSearching(true);
@@ -52,8 +40,6 @@ function Customers() {
             setLoading(false);
         }
     }, []);
-
-    // Sync effect
     useEffect(() => {
         fetchCustomers(searchKeyword);
     }, [fetchCustomers, searchKeyword]);

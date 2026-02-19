@@ -92,7 +92,6 @@ function TaskList() {
 
   const getStatusBadgeClass = (status) => {
     if (!status) return "bg-secondary";
-    // Handle both old 'stage' and new 'status' values just in case
     const normalizedStatus = status.toUpperCase();
     if (normalizedStatus === "TODO" || normalizedStatus === "PENDING") return "bg-secondary";
     if (normalizedStatus === "IN_PROGRESS") return "bg-primary";
@@ -101,7 +100,6 @@ function TaskList() {
     return "bg-secondary";
   };
 
-  // Helper to format date
   const formatDate = (dateString) => {
     if (!dateString) return "No Date";
     return new Date(dateString).toLocaleDateString();
@@ -216,7 +214,7 @@ function TaskList() {
                       <div className="position-absolute end-0 top-100 bg-white text-dark rounded shadow p-2" style={{ zIndex: 1000, minWidth: "150px" }}>
 
 
-                        {/* Delete - Admin only */}
+                        
                         {role === "ADMIN" && (
                           <button
                             className="btn btn-sm btn-danger w-100 text-start"

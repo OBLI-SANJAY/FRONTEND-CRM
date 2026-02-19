@@ -3,22 +3,16 @@ import LeadList from "../components/leads/LeadList";
 import AddLead from "../components/leads/AddLead";
 import leadService from "../services/leadService";
 
-/**
- * Leads Container Component
- * Handles state management, search logic, and UI synchronization.
- */
 function Leads() {
     const [leads, setLeads] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showAddForm, setShowAddForm] = useState(false);
 
-    // Search State
     const [searchKeyword, setSearchKeyword] = useState("");
     const [isSearching, setIsSearching] = useState(false);
     const debounceTimerRef = useRef(null);
 
-    // 1. Fetch function (General fetch/Search fetch)
     const fetchLeads = useCallback(async (keyword = "") => {
         try {
             setLoading(true);
@@ -41,12 +35,10 @@ function Leads() {
         }
     }, []);
 
-    // Initial load
     useEffect(() => {
         fetchLeads();
     }, [fetchLeads]);
 
-    // Debounced Search Effect
     useEffect(() => {
         if (debounceTimerRef.current) {
             clearTimeout(debounceTimerRef.current);
@@ -54,7 +46,7 @@ function Leads() {
 
         debounceTimerRef.current = setTimeout(() => {
             fetchLeads(searchKeyword);
-        }, 500); // 500ms debounce
+        }, 500);
 
         return () => {
             if (debounceTimerRef.current) {
@@ -64,7 +56,7 @@ function Leads() {
     }, [searchKeyword, fetchLeads]);
 
     const handleLeadCreatedRefetch = async () => {
-        await fetchLeads(); // Re-fetch everything
+        await fetchLeads();
         setShowAddForm(false);
     };
 

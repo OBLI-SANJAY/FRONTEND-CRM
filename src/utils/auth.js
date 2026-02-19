@@ -2,7 +2,6 @@ import { jwtDecode } from "jwt-decode";
 
 const normalizeRole = (role) => {
   if (!role) return "EMPLOYEE";
-  // Convert arrays or objects to string for searching
   const r = JSON.stringify(role).toUpperCase();
   if (r.includes("ADMIN")) return "ADMIN";
   if (r.includes("MANAGER")) return "MANAGER";
@@ -19,7 +18,6 @@ export const getRole = () => {
   try {
     const decoded = jwtDecode(token);
     console.log("Full Decoded Token:", decoded);
-    // Check all common role/authority fields
     const rawRole = decoded.role || decoded.roles || decoded.authorities || decoded.scope || decoded.scp;
     return normalizeRole(rawRole);
   } catch (e) {
@@ -32,7 +30,7 @@ export const getEmail = () => {
   if (!token) return "";
   try {
     const decoded = jwtDecode(token);
-    return decoded.sub || decoded.email; // Assuming sub or email is in token
+    return decoded.sub || decoded.email;
   } catch (e) {
     return "";
   }

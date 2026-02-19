@@ -3,10 +3,6 @@ import api from "./api";
 const LEAD_ENDPOINT = "/api/leads";
 
 const leadService = {
-    /**
-     * Fetch all leads from the backend
-     * @returns {Promise<Array>} List of leads
-     */
     getAllLeads: async () => {
         try {
             const data = await api.get(LEAD_ENDPOINT);
@@ -17,9 +13,6 @@ const leadService = {
         }
     },
 
-    /**
-     * Get a single lead by ID
-     */
     getLeadById: async (id) => {
         try {
             return await api.get(`${LEAD_ENDPOINT}/${id}`);
@@ -29,14 +22,8 @@ const leadService = {
         }
     },
 
-    /**
-     * Create a new lead
-     * @param {Object} leadData 
-     * @returns {Promise<Object>} The created lead object (important for Optimistic UI)
-     */
     createLead: async (leadData) => {
         try {
-            // Backend should return the created entity with its dynamic ID
             const data = await api.post(LEAD_ENDPOINT, leadData);
             return data;
         } catch (error) {
@@ -45,9 +32,6 @@ const leadService = {
         }
     },
 
-    /**
-     * Update an existing lead
-     */
     updateLead: async (id, leadData) => {
         try {
             return await api.put(`${LEAD_ENDPOINT}/${id}`, leadData);
@@ -57,9 +41,6 @@ const leadService = {
         }
     },
 
-    /**
-     * Delete a lead
-     */
     deleteLead: async (id) => {
         try {
             await api.delete(`${LEAD_ENDPOINT}/${id}`);
@@ -69,11 +50,6 @@ const leadService = {
         }
     },
 
-    /**
-     * Update lead stage
-     * @param {string} id 
-     * @param {string} stage 
-     */
     updateLeadStage: async (id, stage) => {
         try {
             return await api.patch(`${LEAD_ENDPOINT}/${id}/stage`, { stage });
@@ -83,9 +59,6 @@ const leadService = {
         }
     },
 
-    /**
-     * Search leads by keyword
-     */
     searchLeads: async (keyword) => {
         try {
             const data = await api.get(`${LEAD_ENDPOINT}/search?keyword=${encodeURIComponent(keyword)}`);
