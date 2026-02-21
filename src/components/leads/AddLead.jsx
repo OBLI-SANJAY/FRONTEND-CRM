@@ -112,7 +112,7 @@ function AddLead({ onLeadAdded }) {
       <div className="card text-white border-secondary p-4 mx-auto" style={{ maxWidth: "600px" }}>
         <div className="card-body p-4">
           <form onSubmit={handleSubmit}>
-            {/* Errors are shown via SweetAlert2 popup */}
+
 
             <div className="mb-3">
               <label className="form-label">Full Name</label>

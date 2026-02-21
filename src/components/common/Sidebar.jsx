@@ -7,8 +7,6 @@ function Sidebar() {
   const location = useLocation();
   const role = getRole();
   const { theme, toggleTheme } = useTheme();
-
-  // Read fullName from localStorage (stored after login)
   const storedUser = localStorage.getItem("user");
   const fullName = storedUser ? (JSON.parse(storedUser).fullName || "User") : "User";
   const avatarLetter = fullName.charAt(0).toUpperCase();

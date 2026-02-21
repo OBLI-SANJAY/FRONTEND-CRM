@@ -41,11 +41,8 @@ function Signup() {
     setLoading(true);
     try {
       const responseData = await api.post("/auth/register", { email, password, role, fullName, phone, address });
-      // Debug: log what the backend actually returned
-      console.log("Register response.data:", responseData);
 
-      // Extract success message safely (never store whole object)
-      let successMsg = "Account created successfully! You can now sign in.";
+      console.log("Register response.data:", responseData); let successMsg = "Account created successfully! You can now sign in.";
       if (responseData && typeof responseData === "object" && typeof responseData.message === "string") {
         successMsg = responseData.message;
       } else if (typeof responseData === "string" && responseData) {
@@ -53,7 +50,6 @@ function Signup() {
       }
 
       showSuccess(successMsg);
-      // Clear form
       setEmail("");
       setPassword("");
       setConfirmPassword("");
@@ -62,7 +58,6 @@ function Signup() {
       setAddress("");
       setStep(1);
     } catch (err) {
-      // Safely extract a string message – never store an object in state
       let backendMessage = "Registration failed";
       if (err.response?.data) {
         const d = err.response.data;

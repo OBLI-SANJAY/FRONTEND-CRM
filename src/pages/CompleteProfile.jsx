@@ -25,8 +25,6 @@ function CompleteProfile() {
         try {
             const result = await userService.updateProfile(formData);
             console.log("Update profile response:", result);
-
-            // Update local storage user profile data
             const oldUserStr = localStorage.getItem("user");
             if (oldUserStr) {
                 const user = JSON.parse(oldUserStr);
@@ -39,7 +37,6 @@ function CompleteProfile() {
 
             navigate("/dashboard");
         } catch (err) {
-            // Safely extract a string message – never store an object in state
             let errorMsg = "Failed to update profile.";
             if (err.response?.data) {
                 const d = err.response.data;

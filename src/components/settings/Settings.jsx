@@ -18,7 +18,6 @@ function Settings() {
   }, []);
 
   const fetchProfile = async () => {
-    // Try to pre-fill from localStorage immediately
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
@@ -33,7 +32,6 @@ function Settings() {
       } catch (_) { }
     }
 
-    // Then try to fetch fresh data from the backend
     try {
       const user = await userService.getCurrentUser();
       setFormData({
@@ -44,7 +42,6 @@ function Settings() {
         role: user.role || ""
       });
     } catch (err) {
-      // If API fails but we have localStorage data, show a soft warning instead of error
       if (!storedUser) {
         setMessage({ type: "error", text: "Failed to load profile data." });
       }
@@ -65,8 +62,6 @@ function Settings() {
       });
 
       showSuccess("Profile updated successfully!");
-
-      // Update local storage
       const oldUserStr = localStorage.getItem("user");
       if (oldUserStr) {
         const user = JSON.parse(oldUserStr);

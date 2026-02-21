@@ -44,7 +44,7 @@ function Login() {
       if (isValidJWT) {
         setAuthData(rawToken);
 
-        // Fetch current user details immediately after login
+
         try {
           const { default: userService } = await import("../../services/userService");
           const user = await userService.getCurrentUser();
@@ -61,13 +61,13 @@ function Login() {
           }
         } catch (profileErr) {
           console.error("Failed to fetch user profile", profileErr);
-          navigate("/dashboard"); // Fallback
+          navigate("/dashboard");
         }
       } else {
         throw new Error("Invalid email or password");
       }
     } catch (err) {
-      // Safely extract a string message from the error – never store an object in state
+
       let backendMessage = "Invalid email or password";
 
       if (err.response?.data) {
