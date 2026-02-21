@@ -20,6 +20,24 @@ const userService = {
             console.error("Error fetching all users:", error);
             throw error;
         }
+    },
+
+    getCurrentUser: async () => {
+        try {
+            return await api.get(`${USER_ENDPOINT}/me`);
+        } catch (error) {
+            console.error("Error fetching current user:", error);
+            throw error;
+        }
+    },
+
+    updateProfile: async (profileData) => {
+        try {
+            return await api.put(`${USER_ENDPOINT}/profile`, profileData);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            throw error;
+        }
     }
 };
 

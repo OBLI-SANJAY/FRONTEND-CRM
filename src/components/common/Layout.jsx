@@ -49,9 +49,13 @@ function Layout() {
                     <span className="navbar-brand mb-0 h1 ms-2 text-main">ClientConnect</span>
                 </nav>
 
-                <main className="flex-grow-1 overflow-auto p-4">
-                    <Outlet />
-                    <Footer />
+                <main className="flex-grow-1 overflow-auto d-flex flex-column">
+                    <div className="flex-grow-1 p-4">
+                        <Outlet />
+                    </div>
+                    <div className="mt-auto">
+                        <Footer />
+                    </div>
                 </main>
             </div>
         </div>

@@ -152,7 +152,7 @@ button:hover {
   border-radius: 12px;
   border: 1px solid #334155;
   background-color: #0f172a;
-  color: #f8fafc;
+  color: #f8fafc !important;
   font-size: 15px;
   transition: all 0.2s ease;
   appearance: none;
@@ -188,37 +188,75 @@ button:hover {
 }
 
 .login-box input::placeholder {
-  color: #475569;
+  color: #94a3b8 !important;
 }
 
 .remember {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 24px;
   cursor: pointer;
+  user-select: none;
+  position: relative;
 }
 
 .remember input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: #3ef08c;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #334155;
+  border-radius: 6px;
+  background-color: #0f172a;
   cursor: pointer;
-  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0;
+}
+
+.remember input[type="checkbox"]:checked {
+  background-color: #3ef08c;
+  border-color: #3ef08c;
+}
+
+.remember input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #064e3b;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+.remember input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(62, 240, 140, 0.1);
+}
+
+.remember input[type="checkbox"]:hover {
+  border-color: #3ef08c;
 }
 
 .remember span {
   font-size: 14px;
-  color: #94a3b8;
-  font-weight: 400;
+  color: #d7e1ee;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.remember:hover span {
+  color: #f8fafc;
 }
 
 .login-btn {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #3ef08c, #10b981);
-  color: #064e3b;
+  background: linear-gradient(135deg, #2bc56e, #10b981);
+  color: #000000;
   border: none;
   border-radius: 12px;
   font-weight: 700;
@@ -373,8 +411,12 @@ button:hover {
   border: 1px solid #334155;
   background: #0f172a;
   border-radius: 12px;
-  color: #ffffff;
+  color: #ffffff !important;
   font-size: 15px;
+}
+
+.forgot-card input::placeholder {
+  color: #94a3b8 !important;
 }
 
 .forgot-card input:focus {
@@ -410,7 +452,7 @@ button:hover {
 }
 
 .footer-text a {
-  color: #3ef08c;
+  color: #0ca74f;
   text-decoration: none;
   font-weight: 600;
   margin-left: 4px;

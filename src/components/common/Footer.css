@@ -1,134 +1,133 @@
 .app-footer {
     background-color: var(--bg-card);
     border-top: 1px solid var(--border-soft);
-    padding: 3rem 2rem 1.5rem;
-    margin-top: 4rem;
+    padding: 1rem 2rem;
     color: var(--text-secondary);
     transition: all 0.3s ease;
 }
 
 [data-theme='light'] .app-footer {
-    background-color: #ffffff;
-    border-top: 1px solid var(--border-soft);
+    background-color: #d1f5f6, rgb(119, 223, 113);
 }
 
-.footer-content {
+.footer-balanced-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
+    align-items: flex-start;
     max-width: 1200px;
     margin: 0 auto;
+    font-size: 0.9rem;
 }
 
-.footer-section h4 {
-    color: var(--text-main);
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    letter-spacing: -0.01em;
-}
-
-.footer-logo {
-    color: var(--green-primary);
-    font-size: 1.25rem;
-    font-weight: 800;
+.footer-logo-box {
     margin-bottom: 0.5rem;
-    letter-spacing: -0.03em;
 }
 
-.footer-tagline {
+.footer-middle-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.footer-middle-title {
+    color: var(--text-main);
     font-size: 0.95rem;
-    line-height: 1.6;
-    max-width: 300px;
-}
-
-.footer-section ul {
-    list-style: none;
-    padding: 0;
+    font-weight: 600;
     margin: 0;
 }
 
-.footer-section ul li {
-    margin-bottom: 0.75rem;
+.footer-middle-text {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
 }
 
-.footer-section ul li a {
-    color: var(--text-secondary);
+.footer-middle-link {
+    color: var(--green-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
     text-decoration: none;
-    font-size: 0.95rem;
     transition: color 0.2s ease;
 }
 
-.footer-section ul li a:hover {
+.footer-middle-link:hover {
+    color: var(--green-hover);
+    text-decoration: underline;
+}
+
+.footer-logo-text {
     color: var(--green-primary);
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    display: block;
+    margin-bottom: 0.2rem;
 }
 
-.social-links {
-    display: flex;
-    gap: 1.25rem;
-}
-
-.social-links a {
+.footer-tagline-sm {
     color: var(--text-muted);
-    transition: color 0.2s ease, transform 0.2s ease;
+    font-size: 0.8rem;
+    font-weight: 500;
 }
 
-.social-links a:hover {
-    color: var(--green-primary);
-    transform: translateY(-2px);
-}
-
-.footer-bottom {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-soft);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+.footer-copy-text {
+    color: var(--text-muted);
     font-size: 0.85rem;
-    color: var(--text-muted);
+    margin: 0;
 }
 
-.footer-legal {
+.footer-right-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.footer-link-group {
     display: flex;
     gap: 1.5rem;
 }
 
-.footer-legal a {
-    color: var(--text-muted);
-    text-decoration: none;
+.footer-link-group a {
+    color: var(--text-secondary);
+    font-weight: 500;
     transition: color 0.2s ease;
 }
 
-.footer-legal a:hover {
-    color: var(--text-main);
+.footer-link-group a:hover {
+    color: var(--green-primary);
+}
+
+.social-links-balanced {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.social-links-balanced a {
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+}
+
+.social-links-balanced a:hover {
+    color: var(--green-primary);
+    transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
-    .app-footer {
-        padding: 2rem 1rem 1rem;
-        text-align: center;
-    }
-
-    .footer-content {
-        gap: 2rem;
-    }
-
-    .footer-tagline {
-        margin: 0 auto;
-    }
-
-    .social-links {
-        justify-content: center;
-    }
-
-    .footer-bottom {
+    .footer-balanced-container {
         flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .footer-middle-section {
+        margin: 1rem 0;
+    }
+
+    .footer-right-section {
+        align-items: center;
     }
 }

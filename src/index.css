@@ -22,9 +22,10 @@
 
   --bg-main: #0f172a;
   --bg-sidebar: #1e293b;
-  --bg-card: #1e293b;
-  --bg-card-hover: #334155;
-  --border-soft: #334155;
+  --bg-card: rgba(30, 41, 59, 0.6);
+  --bg-card-hover: rgba(51, 65, 85, 0.6);
+  --border-soft: rgba(255, 255, 255, 0.1);
+  /* Slightly brighter for dark mode */
   --text-main: #f8fafc;
   --text-secondary: #bbc6d6;
   --text-muted: #c2cddd;
@@ -41,9 +42,9 @@
 [data-theme='dark'] {
   --bg-main: #0f172a;
   --bg-sidebar: #1e293b;
-  --bg-card: #1e293b;
-  --bg-card-hover: #334155;
-  --border-soft: #334155;
+  --bg-card: rgba(30, 41, 59, 0.6);
+  --bg-card-hover: rgba(51, 65, 85, 0.6);
+  --border-soft: rgba(255, 255, 255, 0.1);
   --text-main: #f8fafc;
   --text-secondary: #bbc6d6;
   --text-muted: #c2cddd;
@@ -57,22 +58,22 @@
 }
 
 [data-theme='light'] {
-  --bg-main: #b5bdc5;
+  --bg-main: #eeeeee;
   --bg-sidebar: #ffffff;
-  --bg-card: #b8caca;
-  --bg-card-hover: #f8fafc;
-  --border-soft: #e2e8f0;
+  --bg-card: rgba(255, 255, 255, 0.75);
+  --bg-card-hover: rgba(255, 255, 255, 0.9);
+  --border-soft: rgba(0, 0, 0, 0.12);
   --text-main: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
+  --text-secondary: #000000;
+  --text-muted: #000000;
   --btn-disabled: #f1f5f9;
   --success-bg: #ecfdf5;
   --navbar-bg: #ffffff;
   --input-bg: #f8fafc;
   --white: #ffffff;
   --close-btn-filter: none;
-  --green-primary: #059669;
-  --green-hover: #047857;
+  --green-primary: #3bc865;
+  --green-hover: #ffffffce;
   --shadow-main: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
   --bg-kanban-column: #e2e8f0;
@@ -81,13 +82,22 @@
 
 body {
   background-color: var(--bg-main);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center;
+  background-attachment: fixed;
   color: var(--text-secondary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
   min-height: 100vh;
 }
 
 [data-theme='light'] body {
   background: var(--bg-main);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center;
   background-attachment: fixed;
 }
 
@@ -97,8 +107,6 @@ body {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-h1,
-h2,
 h3,
 h4,
 h5,
@@ -108,7 +116,8 @@ h6,
 .h3,
 .h4,
 .h5,
-.h6 {
+.h6,
+.card-title {
   color: var(--text-main);
   font-weight: 700;
   letter-spacing: -0.025em;
@@ -127,6 +136,10 @@ h6,
   color: inherit !important;
 }
 
+.bg-sidebar {
+  background-color: var(--bg-sidebar) !important;
+}
+
 button:hover {
   cursor: pointer;
 }
@@ -141,6 +154,40 @@ button:disabled {
 a {
   text-decoration: none;
   color: inherit;
+  transition: color 0.2s ease;
+}
+
+.form-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.text-muted-compact {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.btn-outline-secondary {
+  border-color: var(--border-soft) !important;
+  color: var(--text-secondary) !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--bg-card-hover) !important;
+  color: var(--text-main) !important;
+  border-color: var(--green-primary) !important;
+}
+
+.btn-light.border {
+  background-color: transparent !important;
+  border-color: var(--border-soft) !important;
+  color: var(--text-secondary) !important;
+}
+
+.btn-light.border:hover {
+  background-color: var(--bg-card-hover) !important;
+  color: var(--text-main) !important;
 }
 
 ::-webkit-scrollbar {
@@ -165,9 +212,9 @@ a {
 .btn-primary:active,
 .btn-primary:visited,
 .btn-success {
-  background: linear-gradient(135deg, var(--green-primary), var(--green-hover)) !important;
+  background: linear-gradient(135deg, rgb(59, 179, 223), rgb(45, 186, 121)) !important;
   border: none !important;
-  color: white !important;
+  color: rgb(255, 255, 255) !important;
   font-weight: 600;
   box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
 }
@@ -182,10 +229,12 @@ a {
 
 .card {
   background-color: var(--bg-card) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-soft);
   box-shadow: var(--shadow-main);
   border-radius: var(--radius-main) !important;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color 0.3s ease;
 }
 
 .highlight-hover:hover {
@@ -261,6 +310,8 @@ a {
 
 .kanban-column {
   background-color: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 16px;
   min-width: 320px;
   width: 320px;
@@ -370,7 +421,7 @@ textarea {
 
 .btn-custom.active {
   background: var(--green-primary);
-  border-color: var(--green-primary);
+  border-color: white;
   color: white !important;
 }
 

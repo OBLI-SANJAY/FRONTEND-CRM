@@ -4,7 +4,7 @@ import Footer from "../components/common/Footer";
 
 function Home() {
   return (
-    <div className="bg-dark text-white">
+    <div className="bg-dark text-white min-vh-100 d-flex flex-column">
       <header className="border-bottom border-success">
         <div className="container d-flex justify-content-between align-items-center py-3">
           <div className="d-flex align-items-center gap-2">
@@ -60,7 +60,9 @@ function Home() {
         </section>
       </main>
 
-      <Footer />
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 }

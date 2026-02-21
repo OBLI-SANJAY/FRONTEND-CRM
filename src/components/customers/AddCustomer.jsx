@@ -168,7 +168,7 @@ function AddCustomer({ onCustomerAdded }) {
                                     </option>
                                 ))}
                             </select>
-                            {fetchingUsers && <small className="text-muted">Loading users...</small>}
+                            {fetchingUsers && <small className="text-muted text-muted-compact">Loading users...</small>}
                         </div>
                     </div>
 

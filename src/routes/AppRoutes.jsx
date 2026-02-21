@@ -26,8 +26,8 @@ import EditCustomer from "../components/customers/EditCustomer";
 import TaskList from "../components/tasks/TaskList";
 import AddTask from "../components/tasks/AddTask";
 
-
 import Settings from "../components/settings/Settings";
+import CompleteProfile from "../pages/CompleteProfile";
 
 function AppRoutes() {
   return (
@@ -36,6 +36,15 @@ function AppRoutes() {
 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+
+      <Route
+        path="/complete-profile"
+        element={
+          <ProtectedRoute allowedRoles={["MANAGER", "EMPLOYEE"]}>
+            <CompleteProfile />
+          </ProtectedRoute>
+        }
+      />
 
 
       <Route element={<Layout />}>

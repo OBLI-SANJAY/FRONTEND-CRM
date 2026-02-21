@@ -32,9 +32,24 @@ function Login() {
 
       if (isValidJWT) {
         setAuthData(token);
-        navigate("/dashboard");
-      } else {
 
+        // Fetch current user details immediately after login
+        try {
+          // Dynamic import to avoid circular dependencies if any
+          const { default: userService } = await import("../../services/userService");
+          const user = await userService.getCurrentUser();
+          localStorage.setItem("user", JSON.stringify(user));
+
+          if (!user.profileCompleted && (user.role === "MANAGER" || user.role === "EMPLOYEE")) {
+            navigate("/complete-profile");
+          } else {
+            navigate("/dashboard");
+          }
+        } catch (profileErr) {
+          console.error("Failed to fetch user profile", profileErr);
+          navigate("/dashboard"); // Fallback
+        }
+      } else {
         throw new Error("Invalid email or password");
       }
     } catch (err) {
@@ -44,8 +59,7 @@ function Login() {
         "Invalid email or password";
 
       setGeneralError(backendMessage);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };

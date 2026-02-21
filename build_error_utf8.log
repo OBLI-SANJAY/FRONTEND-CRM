@@ -1,0 +1,57 @@
+﻿[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 63 modules transformed.
+node.exe : [31mx[39m 
+Build failed in 728ms
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: ([31mx[39m B   
+ uild failed in 728    
+ms:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+[31merror during 
+build:
+[31mCould not resolve 
+"./auth/auth.css" from 
+"src/pages/CompleteProf
+ile.jsx"[31m
+file: [36mC:/Users/san
+deep/FRONTEND-CRM/src/p
+ages/CompleteProfile.js
+x[31m
+    at getRollupError (
+file:///C:/Users/sandee
+p/FRONTEND-CRM/node_mod
+ules/rollup/dist/es/sha
+red/parseAst.js:402:41)
+    at error (file:///C
+:/Users/sandeep/FRONTEN
+D-CRM/node_modules/roll
+up/dist/es/shared/parse
+Ast.js:398:42)
+    at ModuleLoader.han
+dleInvalidResolvedId (f
+ile:///C:/Users/sandeep
+/FRONTEND-CRM/node_modu
+les/rollup/dist/es/shar
+ed/node-entry.js:21684:
+24)
+    at file:///C:/Users
+/sandeep/FRONTEND-CRM/n
+ode_modules/rollup/dist
+/es/shared/node-entry.j
+s:21644:26[39m
