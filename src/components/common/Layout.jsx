@@ -10,7 +10,7 @@ function Layout() {
 
     return (
         <div className="d-flex w-100 vh-100 overflow-hidden bg-main">
-            <div className="d-none d-md-block" style={{ width: "280px" }}>
+            <div className="d-none d-md-block" style={{ width: "300px" }}>
                 <Sidebar />
             </div>
 
@@ -22,7 +22,7 @@ function Layout() {
                 >
                     <div
                         className="h-100 bg-sidebar position-relative border-end border-soft"
-                        style={{ width: "280px", maxWidth: "80%" }}
+                        style={{ width: "300px", maxWidth: "80%" }}
                         onClick={(e) => e.stopPropagation()}
                     >
                         <button

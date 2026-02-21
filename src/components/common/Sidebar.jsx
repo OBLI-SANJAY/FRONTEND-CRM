@@ -2,11 +2,11 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getRole, clearAuthData } from "../../utils/auth";
 import { useTheme } from "../../context/ThemeContext";
+import ThemeToggle from "./ThemeToggle";
 
 function Sidebar() {
   const location = useLocation();
   const role = getRole();
-  const { theme, toggleTheme } = useTheme();
   const storedUser = localStorage.getItem("user");
   const fullName = storedUser ? (JSON.parse(storedUser).fullName || "User") : "User";
   const avatarLetter = fullName.charAt(0).toUpperCase();
@@ -20,17 +20,10 @@ function Sidebar() {
   };
 
   return (
-    <div className="d-flex flex-column flex-shrink-0 p-3 bg-sidebar h-100 border-end border-soft">
-      <div className="d-flex align-items-center justify-content-between mb-3 mb-md-0 me-md-auto text-decoration-none w-100">
-        <span className="fs-4 fw-bold text-main">ClientConnect</span>
-        <button
-          className="btn btn-custom p-2 d-flex align-items-center justify-content-center"
-          onClick={toggleTheme}
-          title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          style={{ width: "40px", height: "40px" }}
-        >
-          {theme === "dark" ? "☀️" : "🌙"}
-        </button>
+    <div className="d-flex flex-column flex-shrink-0 p-3 bg-sidebar h-100 border-end border-soft" style={{ width: "300px" }}>
+      <div className="d-flex align-items-center justify-content-between mb-4 w-100">
+        <span className="fs-5 fw-bold" style={{ color: "var(--success)" }}>ClientConnect</span>
+        <ThemeToggle />
       </div>
       <hr className="text-muted" />
       <ul className="nav nav-pills flex-column mb-auto">

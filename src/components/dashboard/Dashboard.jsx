@@ -1,19 +1,68 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getRole } from "../../utils/auth";
+import customerService from "../../services/customerService";
+import taskService from "../../services/taskService";
+import { showConfirm } from "../../utils/alert";
 
 
 function Dashboard() {
   const role = getRole() || "EMPLOYEE";
 
+  const handleJoinCall = async () => {
+    const confirmed = await showConfirm(
+      "You are about to join the Product Demo meeting with TechGiant Inc.",
+      "Join Meeting?"
+    );
+    if (confirmed) {
+      window.open("https://zoom.us/test", "_blank");
+    }
+  };
+
+
+  const [dynamicStats, setDynamicStats] = useState({
+    activeClients: 0,
+    pendingTasks: 0,
+    loading: true
+  });
+
+  useEffect(() => {
+    const fetchDashboardStats = async () => {
+      try {
+        const [customers, tasks] = await Promise.all([
+          customerService.getAllCustomers(),
+          taskService.getAllTasks()
+        ]);
+
+        const activeClientsCount = (customers || []).filter(c =>
+          c.status === "Active" || !c.status
+        ).length;
+
+        const pendingTasksCount = (tasks || []).filter(t =>
+          t.stage !== "Completed"
+        ).length;
+
+        setDynamicStats({
+          activeClients: activeClientsCount,
+          pendingTasks: pendingTasksCount,
+          loading: false
+        });
+      } catch (err) {
+        console.error("Failed to fetch dashboard stats:", err);
+        setDynamicStats(prev => ({ ...prev, loading: false }));
+      }
+    };
+
+    fetchDashboardStats();
+  }, []);
 
   const statsByRole = {
     ADMIN: {
       revenue: "$45,231.89",
       revenueTrend: "+20.1% from last month",
-      clients: "573",
+      clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+12 new this week",
-      tasks: "12",
+      tasks: dynamicStats.pendingTasks.toString(),
       tasksTrend: "3 due today",
       conversion: "3.2%",
       conversionTrend: "-0.4% from last week",
@@ -21,9 +70,9 @@ function Dashboard() {
     MANAGER: {
       revenue: "$18,450.20",
       revenueTrend: "+8.3% from last month",
-      clients: "214",
+      clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+5 new this week",
-      tasks: "7",
+      tasks: dynamicStats.pendingTasks.toString(),
       tasksTrend: "2 due today",
       conversion: "2.1%",
       conversionTrend: "-0.2% from last week",
@@ -31,9 +80,9 @@ function Dashboard() {
     EMPLOYEE: {
       revenue: "$1,120.00",
       revenueTrend: "+2.1% from last month",
-      clients: "68",
+      clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+1 new this week",
-      tasks: "3",
+      tasks: dynamicStats.pendingTasks.toString(),
       tasksTrend: "1 due today",
       conversion: "1.2%",
       conversionTrend: "-0.1% from last week",
@@ -220,7 +269,12 @@ function Dashboard() {
                   <span className="badge bg-white text-success px-3 py-2">Today, 2:00 PM</span>
                 </div>
               </div>
-              <button className="btn btn-light w-100 fw-bold shadow-sm">Join Call</button>
+              <button
+                className="btn btn-light w-100 fw-bold shadow-sm"
+                onClick={handleJoinCall}
+              >
+                Join Call
+              </button>
             </div>
           </div>
         </div>
