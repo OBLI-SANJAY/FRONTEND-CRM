@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../services/api";
+import { showSuccess, showError } from "../../utils/alert";
 import "./auth.css";
 
 function Signup() {
@@ -12,40 +13,46 @@ function Signup() {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
 
   const handleNext = () => {
     if (!email || !password || !confirmPassword) {
-      setError("Please fill in email and password fields");
+      showError("Please fill in email and password fields");
       return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      showError("Passwords do not match");
       return;
     }
-    setError("");
     setStep(2);
   };
 
   const handleSignup = async () => {
     if (!email || !password || !fullName || !phone || !address) {
-      setError("Please fill in all the required fields");
+      showError("Please fill in all the required fields");
       return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      showError("Passwords do not match");
       return;
     }
 
     setLoading(true);
-    setError("");
-    setSuccess("");
     try {
-      await api.post("/auth/register", { email, password, role, fullName, phone, address });
-      setSuccess("Account created successfully! You can now sign in.");
+      const responseData = await api.post("/auth/register", { email, password, role, fullName, phone, address });
+      // Debug: log what the backend actually returned
+      console.log("Register response.data:", responseData);
+
+      // Extract success message safely (never store whole object)
+      let successMsg = "Account created successfully! You can now sign in.";
+      if (responseData && typeof responseData === "object" && typeof responseData.message === "string") {
+        successMsg = responseData.message;
+      } else if (typeof responseData === "string" && responseData) {
+        successMsg = responseData;
+      }
+
+      showSuccess(successMsg);
       // Clear form
       setEmail("");
       setPassword("");
@@ -55,14 +62,20 @@ function Signup() {
       setAddress("");
       setStep(1);
     } catch (err) {
-      const backendMessage =
-        err.response?.data?.message ||
-        err.response?.data ||
-        "Registration failed";
-
-      setError(backendMessage);
-    }
-    finally {
+      // Safely extract a string message – never store an object in state
+      let backendMessage = "Registration failed";
+      if (err.response?.data) {
+        const d = err.response.data;
+        if (typeof d === "string") {
+          backendMessage = d;
+        } else if (d && typeof d === "object" && typeof d.message === "string") {
+          backendMessage = d.message;
+        }
+      } else if (err.message && typeof err.message === "string") {
+        backendMessage = err.message;
+      }
+      showError(backendMessage);
+    } finally {
       setLoading(false);
     }
   };
@@ -96,13 +109,6 @@ function Signup() {
           <p className="subtitle">
             Please enter your details to sign in.
           </p>
-
-          {error && <div className="error-message text-danger mb-3">{error}</div>}
-          {success && (
-            <div className="alert alert-success mb-3" role="alert">
-              {success} <Link to="/login" className="alert-link">Sign in here</Link>
-            </div>
-          )}
 
           {step === 1 ? (
             <>

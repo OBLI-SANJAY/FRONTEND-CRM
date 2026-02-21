@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import customerService from "../../services/customerService";
 import userService from "../../services/userService";
 import { getRole } from "../../utils/auth";
+import { showError } from "../../utils/alert";
 
 function AddCustomer({ onCustomerAdded }) {
     const navigate = useNavigate();
@@ -65,7 +66,7 @@ function AddCustomer({ onCustomerAdded }) {
             if (onCustomerAdded) onCustomerAdded();
             navigate("/customers");
         } catch (err) {
-            setError(err.response?.data?.message || err.message || "Failed to create customer");
+            showError(err.response?.data?.message || err.message || "Failed to create customer");
         } finally {
             setLoading(false);
         }
@@ -73,8 +74,8 @@ function AddCustomer({ onCustomerAdded }) {
 
     if (role === "EMPLOYEE") {
         return (
-            <div className="alert alert-warning">
-                You do not have permission to create customers.
+            <div style={{ padding: "20px" }}>
+                <p>You do not have permission to create customers.</p>
             </div>
         );
     }
@@ -83,8 +84,6 @@ function AddCustomer({ onCustomerAdded }) {
         <div className="card shadow-sm border-0">
             <div className="card-body p-4">
                 <h3 className="card-title mb-4">Add New Customer</h3>
-
-                {error && <div className="alert alert-danger">{error}</div>}
 
                 <form onSubmit={handleSubmit}>
                     <div className="row g-3">

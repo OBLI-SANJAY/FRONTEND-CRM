@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import KanbanLeads from "./KanbanLeads";
 import { getRole, getEmail } from "../../utils/auth";
 import leadService from "../../services/leadService";
+import { showError, showConfirm, showCalling } from "../../utils/alert";
 import "./KanbanLeads.css";
 
 
@@ -180,13 +181,14 @@ function LeadList({ leads: propsLeads, onRefresh, loading: parentLoading, search
   }
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this lead?")) {
+    const confirmed = await showConfirm("This will permanently remove the lead.", "Delete this lead?");
+    if (confirmed) {
       try {
         await leadService.deleteLead(id);
         await internalRefresh();
         setOpenMenu(null);
       } catch (err) {
-        alert("Failed to delete lead. Please try again.");
+        showError("Failed to delete lead. Please try again.");
       }
     }
   };
@@ -282,9 +284,9 @@ function LeadList({ leads: propsLeads, onRefresh, loading: parentLoading, search
           <p className="mt-2">{isSearching ? "Searching leads..." : "Loading leads..."}</p>
         </div>
       ) : error ? (
-        <div className="alert alert-danger" role="alert">
-          {error}
-          <button className="btn btn-sm btn-outline-danger ms-3" onClick={internalRefresh}>Retry</button>
+        <div className="text-center py-4">
+          <p className="text-danger">⚠ {error}</p>
+          <button className="btn btn-sm btn-outline-danger" onClick={internalRefresh}>Retry</button>
         </div>
       ) : viewMode === "table" ? (
         <div className="card">
@@ -347,7 +349,7 @@ function LeadList({ leads: propsLeads, onRefresh, loading: parentLoading, search
                           </a>
                           <button
                             className="btn btn-sm btn-light w-100 text-start mb-1"
-                            onClick={() => alert(`Calling ${lead.name}...`)}
+                            onClick={() => showCalling(lead.name)}
                           >
                             Call
                           </button>

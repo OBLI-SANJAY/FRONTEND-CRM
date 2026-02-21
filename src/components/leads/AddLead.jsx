@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import leadService from "../../services/leadService";
 import userService from "../../services/userService";
 import { getEmail, getRole } from "../../utils/auth";
+import { showError } from "../../utils/alert";
 
 function AddLead({ onLeadAdded }) {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ function AddLead({ onLeadAdded }) {
     e.preventDefault();
 
     if ((role === "ADMIN" || role === "MANAGER") && !formData.assignedTo) {
-      setError(`Please select a ${role === "ADMIN" ? "Manager" : "Employee"} to assign this lead.`);
+      showError(`Please select a ${role === "ADMIN" ? "Manager" : "Employee"} to assign this lead.`);
       return;
     }
 
@@ -83,7 +84,7 @@ function AddLead({ onLeadAdded }) {
         navigate("/leads");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to create lead. Please check your data.");
+      showError(err.response?.data?.message || "Failed to create lead. Please check your data.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -111,11 +112,7 @@ function AddLead({ onLeadAdded }) {
       <div className="card text-white border-secondary p-4 mx-auto" style={{ maxWidth: "600px" }}>
         <div className="card-body p-4">
           <form onSubmit={handleSubmit}>
-            {error && (
-              <div className="alert alert-danger mb-4" role="alert">
-                {error}
-              </div>
-            )}
+            {/* Errors are shown via SweetAlert2 popup */}
 
             <div className="mb-3">
               <label className="form-label">Full Name</label>

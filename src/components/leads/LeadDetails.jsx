@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import leadService from "../../services/leadService";
+import { showCalling } from "../../utils/alert";
 
 function LeadDetails() {
   const { id } = useParams();
@@ -114,7 +115,7 @@ function LeadDetails() {
         </div>
         <div className="d-flex gap-2">
           <button onClick={handleEmailClick} className="btn btn-primary">Email</button>
-          <button className="btn btn-outline-light" onClick={() => alert(`Calling ${lead.name}...`)}>Call</button>
+          <button className="btn btn-outline-light" onClick={() => showCalling(lead.name)}>Call</button>
         </div>
       </div>
 

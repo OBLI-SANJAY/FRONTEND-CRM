@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import userService from "../../services/userService";
+import { showSuccess, showError } from "../../utils/alert";
 
 function Settings() {
   const [formData, setFormData] = useState({
@@ -11,7 +12,6 @@ function Settings() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState({ type: "", text: "" });
 
   useEffect(() => {
     fetchProfile();
@@ -56,7 +56,6 @@ function Settings() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage({ type: "", text: "" });
 
     try {
       await userService.updateProfile({
@@ -65,7 +64,7 @@ function Settings() {
         address: formData.address
       });
 
-      setMessage({ type: "success", text: "Profile updated successfully!" });
+      showSuccess("Profile updated successfully!");
 
       // Update local storage
       const oldUserStr = localStorage.getItem("user");
@@ -77,7 +76,7 @@ function Settings() {
         localStorage.setItem("user", JSON.stringify(user));
       }
     } catch (err) {
-      setMessage({ type: "error", text: "Failed to update profile." });
+      showError("Failed to update profile.");
     } finally {
       setSaving(false);
     }
@@ -94,12 +93,6 @@ function Settings() {
       <div className="card max-w-2xl">
         <div className="card-body p-4">
           <h4 className="card-title mb-4">Profile Information</h4>
-
-          {message.text && (
-            <div className={`alert alert-${message.type === 'error' ? 'danger' : 'success'} mb-4`}>
-              {message.text}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">

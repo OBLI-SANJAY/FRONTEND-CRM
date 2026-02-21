@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import leadService from "../../services/leadService";
 import { getRole, getEmail } from "../../utils/auth";
+import { showWarning } from "../../utils/alert";
 import "./KanbanLeads.css";
 
 const STAGES = ["NEW", "CONTACTED", "FOLLOW_UP", "CONVERTED", "LOST"];
@@ -43,25 +44,25 @@ function KanbanLeads({ leads: propLeads = [], onRefresh }) {
         const assignee = (lead.assignedTo || lead.owner || "").toLowerCase();
         return assignee === currentUserEmail.toLowerCase();
     };
-  
+
     const handleDragEnd = async (result) => {
         const { source, destination, draggableId } = result;
-        if (!destination) return; 
+        if (!destination) return;
         if (
             source.droppableId === destination.droppableId &&
             source.index === destination.index
         ) {
-            return; 
+            return;
         }
 
         const leadId = draggableId;
         const targetStage = destination.droppableId;
         const leadToMove = localLeads.find((l) => String(l.id) === leadId);
         if (!canMoveLead(leadToMove)) {
-            alert("Permission denied: You are not authorized to move this lead.");
+            showWarning("Permission denied: You are not authorized to move this lead.");
             return;
         }
-        const previousLeadsState = [...localLeads]; 
+        const previousLeadsState = [...localLeads];
         setLocalLeads((prev) =>
             prev.map((lead) =>
                 String(lead.id) === leadId ? { ...lead, stage: targetStage } : lead
@@ -87,7 +88,7 @@ function KanbanLeads({ leads: propLeads = [], onRefresh }) {
 
     return (
         <div className="kanban-wrapper">
-          
+
             {isSyncing && (
                 <div className="kanban-sync-indicator bg-primary">
                     <span className="spinner-border spinner-border-sm me-2" role="status" />

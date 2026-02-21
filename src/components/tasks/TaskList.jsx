@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import KanbanTasks from "./KanbanTasks";
 import taskService from "../../services/taskService";
 import { getRole, getEmail } from "../../utils/auth";
+import { showError, showConfirm } from "../../utils/alert";
 import "../kanban/Kanban.css";
 import "./TaskList.css";
 
@@ -69,14 +70,15 @@ function TaskList() {
   );
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this task?")) return;
+    const confirmed = await showConfirm("This will permanently remove the task.", "Delete this task?");
+    if (!confirmed) return;
     try {
       await taskService.deleteTask(id);
       setTasks(tasks.filter(task => task.id !== id));
       setOpenMenu(null);
     } catch (err) {
       console.error("Failed to delete task:", err);
-      alert("Failed to delete task.");
+      showError("Failed to delete task.");
     }
   };
 
@@ -173,7 +175,11 @@ function TaskList() {
 
       {loading && <div className="text-center p-5"><div className="spinner-border text-primary" role="status"></div></div>}
 
-      {error && <div className="alert alert-danger">{error}</div>}
+      {error && (
+        <div className="text-center py-4">
+          <p className="text-danger">⚠ {error}</p>
+        </div>
+      )}
 
       {!loading && !error && (
         viewMode === "table" ? (
@@ -214,7 +220,7 @@ function TaskList() {
                       <div className="position-absolute end-0 top-100 bg-white text-dark rounded shadow p-2" style={{ zIndex: 1000, minWidth: "150px" }}>
 
 
-                        
+
                         {role === "ADMIN" && (
                           <button
                             className="btn btn-sm btn-danger w-100 text-start"

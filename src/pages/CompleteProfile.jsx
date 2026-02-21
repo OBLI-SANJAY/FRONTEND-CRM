@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userService from "../services/userService";
+import { showError } from "../utils/alert";
 import "../components/auth/auth.css";
 
 function CompleteProfile() {
@@ -10,7 +11,6 @@ function CompleteProfile() {
         phone: "",
         address: ""
     });
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -21,10 +21,10 @@ function CompleteProfile() {
         }
 
         setLoading(true);
-        setError("");
 
         try {
-            await userService.updateProfile(formData);
+            const result = await userService.updateProfile(formData);
+            console.log("Update profile response:", result);
 
             // Update local storage user profile data
             const oldUserStr = localStorage.getItem("user");
@@ -39,7 +39,19 @@ function CompleteProfile() {
 
             navigate("/dashboard");
         } catch (err) {
-            setError(err.response?.data?.message || err.response?.data || "Failed to update profile.");
+            // Safely extract a string message – never store an object in state
+            let errorMsg = "Failed to update profile.";
+            if (err.response?.data) {
+                const d = err.response.data;
+                if (typeof d === "string") {
+                    errorMsg = d;
+                } else if (d && typeof d === "object" && typeof d.message === "string") {
+                    errorMsg = d.message;
+                }
+            } else if (err.message && typeof err.message === "string") {
+                errorMsg = err.message;
+            }
+            showError(errorMsg);
         } finally {
             setLoading(false);
         }
@@ -89,8 +101,6 @@ function CompleteProfile() {
                                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                             />
                         </div>
-
-                        {error && <div className="error-message text-danger mb-3">{error}</div>}
 
                         <button type="submit" className="reset-btn" disabled={loading}>
                             {loading ? "Saving..." : "Save and Continue →"}

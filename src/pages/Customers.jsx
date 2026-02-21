@@ -76,7 +76,7 @@ function Customers() {
                 )}
             </div>
 
-            {error && <div className="alert alert-danger shadow-sm">{error}</div>}
+            {error && <p className="text-danger">⚠ {error}</p>}
 
             {showAddForm ? (
                 <div className="card shadow-sm border-0">

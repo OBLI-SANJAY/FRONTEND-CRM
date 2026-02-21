@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import taskService from "../../services/taskService";
 import { getRole, getEmail } from "../../utils/auth";
+import { showWarning } from "../../utils/alert";
 import "./KanbanTasks.css";
 
 const STAGE_MAP = {
@@ -83,7 +84,7 @@ function KanbanTasks({ tasks: propTasks = [], onRefresh }) {
         const targetStage = destination.droppableId;
         const taskToMove = localTasks.find((t) => String(t.id) === taskId);
         if (!canMoveTask(taskToMove)) {
-            alert("Permission denied: You are not authorized to move this task.");
+            showWarning("Permission denied: You are not authorized to move this task.");
             return;
         }
 

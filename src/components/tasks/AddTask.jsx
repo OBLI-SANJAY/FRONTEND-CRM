@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import taskService from "../../services/taskService";
 import userService from "../../services/userService";
 import { getRole, getEmail } from "../../utils/auth";
+import { showError } from "../../utils/alert";
 
 function AddTask() {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ function AddTask() {
       navigate("/tasks");
     } catch (err) {
       console.error("Error creating task:", err);
-      setError("Failed to create task. Please try again.");
+      showError("Failed to create task. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -89,9 +90,7 @@ function AddTask() {
   if (role === "EMPLOYEE") {
     return (
       <div className="container mt-5">
-        <div className="alert alert-warning">
-          You do not have permission to access this page.
-        </div>
+        <p className="text-warning">⚠ You do not have permission to access this page.</p>
         <Link to="/tasks" className="btn btn-secondary">Back to Tasks</Link>
       </div>
     );
@@ -115,7 +114,6 @@ function AddTask() {
 
       <div className="card text-white border-secondary p-4 mx-auto shadow-lg" style={{ maxWidth: "600px" }}>
         <div className="card-body p-4">
-          {error && <div className="alert alert-danger">{error}</div>}
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">

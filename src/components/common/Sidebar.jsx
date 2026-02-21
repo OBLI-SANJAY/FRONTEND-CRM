@@ -8,6 +8,11 @@ function Sidebar() {
   const role = getRole();
   const { theme, toggleTheme } = useTheme();
 
+  // Read fullName from localStorage (stored after login)
+  const storedUser = localStorage.getItem("user");
+  const fullName = storedUser ? (JSON.parse(storedUser).fullName || "User") : "User";
+  const avatarLetter = fullName.charAt(0).toUpperCase();
+
   const isActive = (path) => {
     return location.pathname.startsWith(path) ? "active" : "text-secondary";
   };
@@ -68,10 +73,10 @@ function Sidebar() {
             className="rounded-circle bg-success d-flex justify-content-center align-items-center me-2 text-white"
             style={{ width: "32px", height: "32px" }}
           >
-            <strong>S</strong>
+            <strong>{avatarLetter}</strong>
           </div>
           <div>
-            <strong className="text-main">Sanjay</strong>
+            <strong className="text-main">{fullName}</strong>
             <div className="small text-muted">{role}</div>
           </div>
         </div>

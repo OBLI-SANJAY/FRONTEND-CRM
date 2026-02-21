@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { setAuthData } from "../../utils/auth";
 import api from "../../services/api";
+import { showError } from "../../utils/alert";
 import "./auth.css";
 
 function Login() {
@@ -9,7 +10,6 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
-  const [generalError, setGeneralError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const validate = () => {
@@ -21,26 +21,40 @@ function Login() {
   };
 
   const handleLogin = async () => {
-    setGeneralError("");
     if (!validate()) return;
 
     setLoading(true);
     try {
-      const token = await api.post("/auth/login", { email, password });
+      const responseData = await api.post("/auth/login", { email, password });
 
-      const isValidJWT = typeof token === "string" && token.split(".").length === 3;
+
+      console.log("Login response.data:", responseData);
+
+
+      let rawToken = null;
+      if (typeof responseData === "string") {
+        rawToken = responseData;
+      } else if (responseData && typeof responseData === "object" && typeof responseData.token === "string") {
+        rawToken = responseData.token;
+      }
+
+      const isValidJWT =
+        typeof rawToken === "string" && rawToken.split(".").length === 3;
 
       if (isValidJWT) {
-        setAuthData(token);
+        setAuthData(rawToken);
 
         // Fetch current user details immediately after login
         try {
-          // Dynamic import to avoid circular dependencies if any
           const { default: userService } = await import("../../services/userService");
           const user = await userService.getCurrentUser();
+          console.log("Current user:", user);
           localStorage.setItem("user", JSON.stringify(user));
 
-          if (!user.profileCompleted && (user.role === "MANAGER" || user.role === "EMPLOYEE")) {
+          if (
+            !user.profileCompleted &&
+            (user.role === "MANAGER" || user.role === "EMPLOYEE")
+          ) {
             navigate("/complete-profile");
           } else {
             navigate("/dashboard");
@@ -53,12 +67,21 @@ function Login() {
         throw new Error("Invalid email or password");
       }
     } catch (err) {
-      const backendMessage =
-        err.response?.data?.message ||
-        err.response?.data ||
-        "Invalid email or password";
+      // Safely extract a string message from the error – never store an object in state
+      let backendMessage = "Invalid email or password";
 
-      setGeneralError(backendMessage);
+      if (err.response?.data) {
+        const d = err.response.data;
+        if (typeof d === "string") {
+          backendMessage = d;
+        } else if (d && typeof d === "object" && typeof d.message === "string") {
+          backendMessage = d.message;
+        }
+      } else if (err.message && typeof err.message === "string") {
+        backendMessage = err.message;
+      }
+
+      showError(backendMessage);
     } finally {
       setLoading(false);
     }
@@ -115,8 +138,6 @@ function Login() {
             {fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
           </div>
 
-          {generalError && <div className="error-message text-danger mb-3">{generalError}</div>}
-
           <label className="remember">
             <input type="checkbox" />
             <span>Remember me for 30 days</span>
@@ -125,8 +146,6 @@ function Login() {
           <button className="login-btn" onClick={handleLogin} disabled={loading}>
             {loading ? "Logging in..." : "Log in →"}
           </button>
-
-
 
           <p className="signup">
             Don't have an account? <Link to="/signup">Sign up</Link>

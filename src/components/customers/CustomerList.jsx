@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getRole } from "../../utils/auth";
 import customerService from "../../services/customerService";
 import userService from "../../services/userService";
+import { showSuccess, showError, showConfirm } from "../../utils/alert";
 
 function CustomerList({ customers, onRefresh, loading, searchKeyword, onSearchChange, isSearching }) {
   const navigate = useNavigate();
@@ -32,13 +33,14 @@ function CustomerList({ customers, onRefresh, loading, searchKeyword, onSearchCh
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this customer? This action cannot be undone.")) {
+    const confirmed = await showConfirm("This action cannot be undone.", "Delete this customer?");
+    if (confirmed) {
       try {
         await customerService.deleteCustomer(id);
         if (onRefresh) onRefresh();
         setOpenMenu(null);
       } catch (err) {
-        alert("Delete failed: " + (err.response?.data?.message || "Server error"));
+        showError("Delete failed: " + (err.response?.data?.message || "Server error"));
       }
     }
   };
@@ -47,11 +49,11 @@ function CustomerList({ customers, onRefresh, loading, searchKeyword, onSearchCh
     try {
       const assignedRole = role === "ADMIN" ? "MANAGER" : "EMPLOYEE";
       await customerService.assignCustomer(id, userEmail, assignedRole);
-      alert("Successfully assigned.");
+      showSuccess("Successfully assigned.");
       if (onRefresh) onRefresh();
       setOpenMenu(null);
     } catch (err) {
-      alert("Assignment failed: " + (err.response?.data?.message || "Check permissions"));
+      showError("Assignment failed: " + (err.response?.data?.message || "Check permissions"));
     }
   };
 
@@ -91,8 +93,8 @@ function CustomerList({ customers, onRefresh, loading, searchKeyword, onSearchCh
                   </td>
                   <td>{c.company}</td>
                   <td>
-                    <span className={`badge rounded-pill ${c.status === "Active" ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger"}`}>
-                      {c.status || "Inactive"}
+                    <span className={`badge rounded-pill bg-success-subtle text-success`}>
+                      {c.status || "Active"}
                     </span>
                   </td>
                   <td>

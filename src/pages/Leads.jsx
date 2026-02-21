@@ -76,7 +76,7 @@ function Leads() {
                 </button>
             </div>
 
-            {error && <div className="alert alert-danger mb-3">{error}</div>}
+            {error && <p className="text-danger">⚠ {error}</p>}
 
             {showAddForm ? (
                 <div className="card shadow-sm p-4">
