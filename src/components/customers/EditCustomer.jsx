@@ -1,64 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import customerService from "../../services/customerService";
+import { showSuccess, showError } from "../../utils/alert";
 
 function EditCustomer() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const customers = [
-    {
-      id: 1,
-      name: "Saran Manohar",
-      role: "Marketing Coordinator",
-      status: "Active",
-      priority: "High",
-      email: "perusu@gmail.com",
-      phone: "+91 12345678",
-      company: "GOOGLE",
-      location: "San Francisco, CA",
-    },
-    {
-      id: 2,
-      name: "Sukumar Parida",
-      role: "Business Consultant",
-      status: "Inactive",
-      priority: "Medium",
-      email: "bot@gmail.com",
-      phone: "+91 1234567890",
-      company: "META",
-      location: "New York, NY",
-    },
-    {
-      id: 3,
-      name: "Thejas",
-      role: "Legal Secretary",
-      status: "Active",
-      priority: "Low",
-      email: "mallu@gmail.com",
-      phone: "+91 123456789",
-      company: "ROCKSTAR GAMES",
-      location: "Chicago, IL",
-    },
-  ];
+  const [form, setForm] = useState({
+    name: "",
+    role: "",
+    status: "Active",
+    priority: "Medium",
+    email: "",
+    phone: "",
+    company: "",
+    location: "",
+  });
+  const [loading, setLoading] = useState(true);
 
-  const selectedCustomer = customers.find(
-    (c) => c.id === Number(id)
-  );
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        setLoading(true);
+        const data = await customerService.getCustomerById(id);
+        if (data) {
+          setForm({
+            ...data,
+            role: data.role || "CEO", // Fallback for data enrichment if needed
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch customer:", err);
+        showError("Failed to load customer data.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const [form, setForm] = useState(
-    selectedCustomer || {}
-  );
-
-  if (!selectedCustomer) {
-    return (
-      <div className="container-fluid d-flex flex-column align-items-center justify-content-center h-100 text-white">
-        <h2>Customer not found</h2>
-        <button className="btn btn-primary mt-3" onClick={() => navigate("/customers")}>
-          Back to Customers
-        </button>
-      </div>
-    );
-  }
+    if (id) {
+      fetchCustomer();
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     setForm({
@@ -66,6 +49,28 @@ function EditCustomer() {
       [e.target.name]: e.target.value,
     });
   };
+
+  const handleSave = async () => {
+    try {
+      await customerService.updateCustomer(id, form);
+      showSuccess("Customer updated successfully!");
+      navigate(`/customers/${id}`);
+    } catch (err) {
+      console.error("Failed to update customer:", err);
+      showError("Update failed: " + (err.response?.data?.message || "Server error"));
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container-fluid d-flex flex-column align-items-center justify-content-center h-100 text-white">
+        <div className="spinner-border text-primary mb-3" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <h2>Loading customer data...</h2>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid">
@@ -109,8 +114,8 @@ function EditCustomer() {
                 value={form.status}
                 onChange={handleChange}
               >
-                <option>Active</option>
-                <option>Inactive</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
               </select>
             </div>
             <div className="col-md-6">
@@ -176,6 +181,60 @@ function EditCustomer() {
             </div>
           </div>
 
+          <h4 className="h5 mt-4 mb-3 border-bottom border-secondary pb-2">Financial Information</h4>
+
+          <div className="row mb-3">
+            <div className="col-md-6 mb-3 mb-md-0">
+              <label className="form-label">totalProduct</label>
+              <input
+                type="number"
+                className="form-control bg-dark text-white border-secondary"
+                name="totalProduct"
+                value={form.totalProduct || ""}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Total Cost (₹)</label>
+              <input
+                type="number"
+                className="form-control bg-dark text-white border-secondary"
+                name="totalCost"
+                value={form.totalCost || ""}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="row mb-3">
+            <div className="col-md-6 mb-3 mb-md-0">
+              <label className="form-label">Amount Paid (₹)</label>
+              <input
+                type="number"
+                className="form-control bg-dark text-white border-secondary"
+                name="amountPaid"
+                value={form.amountPaid || ""}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-md-6">
+              <label className="form-label">Remaining Due (₹)</label>
+              <input
+                className="form-control bg-dark text-white border-secondary"
+                value={(form.totalCost - form.amountPaid || 0).toLocaleString()}
+                readOnly
+                disabled
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="form-label text-muted small">Current Payment Status: </label>
+            <span className={`ms-2 badge ${form.totalCost - form.amountPaid > 0 ? "bg-warning text-dark" : "bg-success"}`}>
+              {form.totalCost - form.amountPaid > 0 ? "Pending Payment" : "Paid"}
+            </span>
+          </div>
+
           <div className="d-flex justify-content-center gap-3 mt-4">
             <button
               className="btn btn-outline-light"
@@ -185,7 +244,7 @@ function EditCustomer() {
             </button>
             <button
               className="edit-btn px-5"
-              onClick={() => navigate(`/customers/${id}`)}
+              onClick={handleSave}
             >
               ✔ Save Changes
             </button>

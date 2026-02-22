@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import customerService from "../../services/customerService";
+import { getRole } from "../../utils/auth";
 import saranImg from "../../assets/images/saran.jpg";
 import Sukuimg from "../../assets/images/sukumar.jpg";
 import mallu from "../../assets/images/mallu.jpeg";
@@ -19,9 +20,9 @@ function CustomerDetails() {
           ...data,
           avatar: data.avatar || [saranImg, Sukuimg, mallu][Math.floor(Math.random() * 3)],
           role: data.role || ["CEO", "Manager", "Director"][Math.floor(Math.random() * 3)],
-          products: data.products || Math.floor(Math.random() * 20) + 1,
+          totalProduct: data.totalProduct || Math.floor(Math.random() * 20) + 1,
           totalCost: data.totalCost || Math.floor(Math.random() * 500000) + 10000,
-          paidAmount: data.paidAmount || Math.floor(Math.random() * 400000),
+          amountPaid: data.amountPaid || Math.floor(Math.random() * 400000),
           address: data.address || "123 Business Rd, Tech City",
 
           ownerName: data.ownerName || ["Alice Smith", "Bob Johnson", "Charlie Brown"][Math.floor(Math.random() * 3)],
@@ -54,9 +55,12 @@ function CustomerDetails() {
     );
   }
 
-  const remainingDue = customer.totalCost - customer.paidAmount;
+  const remainingDue = customer.totalCost - customer.amountPaid;
   const paymentStatus = remainingDue > 0 ? "Pending Payment" : "Paid";
-  const statusBadgeClass = remainingDue > 0 ? "bg-warning text-dark" : "bg-success";
+  const statusBadgeClass = remainingDue > 0 ? "bg-warning text-white" : "bg-success text-white";
+
+  const role = getRole() || "EMPLOYEE";
+  const canEdit = role === "ADMIN" || role === "MANAGER";
 
   return (
     <div className="container-fluid">
@@ -72,26 +76,37 @@ function CustomerDetails() {
               </li>
             </ol>
           </nav>
-          <h1 className="h2 mb-0">Customer Details</h1>
+          <h1 className="h2 mb-0 text-white">Customer Details</h1>
         </div>
 
-        <button className="btn btn-outline-secondary" onClick={() => navigate("/customers")}>
-          ← Back
-        </button>
+        <div className="d-flex gap-2">
+          {canEdit && (
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate(`/customers/${id}/edit`)}
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="me-2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              Edit Customer
+            </button>
+          )}
+          <button className="btn btn-outline-secondary" onClick={() => navigate("/customers")}>
+            ← Back
+          </button>
+        </div>
       </div>
 
       <div className="row g-4">
 
         <div className="col-12 col-lg-4">
           <div className="card h-100">
-            <div className="card-body text-center p-4">
+            <div className="card-body text-center p-4 text-white">
               <img
                 src={customer.avatar}
                 alt={customer.name}
                 className="rounded-circle mb-3 border border-secondary"
                 style={{ width: "120px", height: "120px", objectFit: "cover" }}
               />
-              <h3 className="h4 mb-1">{customer.name}</h3>
+              <h3 className="h4 mb-1 text-white">{customer.name}</h3>
               <p className="text-primary mb-4">{customer.role}</p>
 
               <div className="text-start mt-4">
@@ -128,15 +143,15 @@ function CustomerDetails() {
         <div className="col-12 col-lg-8">
           <div className="card h-100">
             <div className="card-header border-secondary">
-              <h4 className="h5 mb-0">Billing & Payment Information</h4>
+              <h4 className="h5 mb-0 text-white">Billing & Payment Information</h4>
             </div>
-            <div className="card-body p-4">
+            <div className="card-body p-4 text-white">
               <div className="row g-4 mb-5">
 
                 <div className="col-md-6">
                   <div className="p-3 rounded bg-sidebar border border-secondary h-100">
-                    <p className="text-muted small mb-1">Total Products</p>
-                    <h3 className="display-6 fw-bold mb-0">{customer.products}</h3>
+                    <p className="text-muted small mb-1">totalProduct</p>
+                    <h3 className="display-6 fw-bold mb-0">{customer.totalProduct}</h3>
                   </div>
                 </div>
                 <div className="col-md-6">
@@ -151,7 +166,7 @@ function CustomerDetails() {
                 </div>
               </div>
 
-              <h5 className="mb-3">Detailed Breakdown</h5>
+              <h5 className="mb-3 text-white">Detailed Breakdown</h5>
               <div className="table-responsive">
                 <table className="table table-dark table-borderless align-middle mb-0">
                   <tbody>
@@ -162,7 +177,7 @@ function CustomerDetails() {
                     <tr>
                       <td className="text-muted py-3">Amount Paid</td>
                       <td className="text-end py-3 fs-5 text-success">
-                        - ₹{customer.paidAmount.toLocaleString()}
+                        - ₹{customer.amountPaid.toLocaleString()}
                       </td>
                     </tr>
                     <tr className="border-top border-secondary">

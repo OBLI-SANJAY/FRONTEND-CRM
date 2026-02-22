@@ -49,6 +49,15 @@ const customerService = {
             console.error(`Error deleting customer ${id}:`, error);
             throw error;
         }
+    },
+
+    updateCustomer: async (id, customerData) => {
+        try {
+            return await api.put(`${CUSTOMER_ENDPOINT}/${id}`, customerData);
+        } catch (error) {
+            console.error(`Error updating customer ${id}:`, error);
+            throw error;
+        }
     }
 };
 
