@@ -49,6 +49,13 @@ function Sidebar() {
             <span className="me-2">✅</span> Tasks
           </Link>
         </li>
+        {(role === "ADMIN" || role === "MANAGER") && (
+          <li>
+            <Link to="/staffs" className={`nav-link ${isActive("/staffs")}`}>
+              <span className="me-2">🧑‍💼</span> Staffs
+            </Link>
+          </li>
+        )}
         {role !== "ADMIN" && (
           <li>
             <Link to="/settings" className={`nav-link ${isActive("/settings")}`}>

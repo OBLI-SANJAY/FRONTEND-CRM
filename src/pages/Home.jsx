@@ -49,15 +49,6 @@ function Home() {
           </ul>
         </section>
 
-        <section className="bg-success bg-opacity-10 p-4 rounded text-center">
-          <h4 className="text-white">Get Started with ClientConnect</h4>
-          <p className="text-white-50">
-            Join businesses already boosting productivity.
-          </p>
-          <Link to="/signup" className="btn btn-success rounded-pill px-4">
-            Create Your Account
-          </Link>
-        </section>
       </main>
 
       <div className="mt-auto">

@@ -23,6 +23,7 @@ function Dashboard() {
   const [dynamicStats, setDynamicStats] = useState({
     activeClients: 0,
     pendingTasks: 0,
+    totalRevenue: 0,
     loading: true
   });
 
@@ -42,11 +43,18 @@ function Dashboard() {
           t.stage !== "Completed"
         ).length;
 
+
+        const totalRevenue = (customers || []).reduce((sum, customer) => {
+          return sum + (customer.amountPaid || 0);
+        }, 0);
+
         setDynamicStats({
           activeClients: activeClientsCount,
           pendingTasks: pendingTasksCount,
+          totalRevenue: totalRevenue,
           loading: false
         });
+
       } catch (err) {
         console.error("Failed to fetch dashboard stats:", err);
         setDynamicStats(prev => ({ ...prev, loading: false }));
@@ -58,7 +66,7 @@ function Dashboard() {
 
   const statsByRole = {
     ADMIN: {
-      revenue: "$45,231.89",
+      revenue: `$${dynamicStats.totalRevenue.toLocaleString()}`,
       revenueTrend: "+20.1% from last month",
       clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+12 new this week",
@@ -68,7 +76,7 @@ function Dashboard() {
       conversionTrend: "-0.4% from last week",
     },
     MANAGER: {
-      revenue: "$18,450.20",
+      revenue: `$${dynamicStats.totalRevenue.toLocaleString()}`,
       revenueTrend: "+8.3% from last month",
       clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+5 new this week",
@@ -78,7 +86,7 @@ function Dashboard() {
       conversionTrend: "-0.2% from last week",
     },
     EMPLOYEE: {
-      revenue: "$1,120.00",
+      revenue: `$${dynamicStats.totalRevenue.toLocaleString()}`,
       revenueTrend: "+2.1% from last month",
       clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+1 new this week",

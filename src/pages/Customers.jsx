@@ -61,7 +61,7 @@ function Customers() {
                     <p className="text-secondary small">Maintain and grow your client relationships.</p>
                 </div>
 
-                {role !== "EMPLOYEE" && (
+                {role === "MANAGER" && (
                     <button
                         className={`btn ${showAddForm ? "btn-outline-secondary" : "btn-primary shadow-sm"}`}
                         onClick={() => setShowAddForm(!showAddForm)}

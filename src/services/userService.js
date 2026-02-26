@@ -31,6 +31,15 @@ const userService = {
         }
     },
 
+    getUserById: async (id) => {
+        try {
+            return await api.get(`${USER_ENDPOINT}/${id}`);
+        } catch (error) {
+            console.error(`Error fetching user ${id}:`, error);
+            throw error;
+        }
+    },
+
     updateProfile: async (profileData) => {
         try {
             return await api.put(`${USER_ENDPOINT}/profile`, profileData);

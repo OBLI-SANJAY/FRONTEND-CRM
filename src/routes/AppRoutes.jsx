@@ -28,6 +28,8 @@ import AddTask from "../components/tasks/AddTask";
 
 import Settings from "../components/settings/Settings";
 import CompleteProfile from "../pages/CompleteProfile";
+import StaffList from "../components/staff/StaffList";
+import StaffDetail from "../components/staff/StaffDetail";
 
 function AppRoutes() {
   return (
@@ -146,6 +148,23 @@ function AppRoutes() {
           element={
             <ProtectedRoute allowedRoles={["MANAGER", "EMPLOYEE"]}>
               <Settings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/staffs"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN", "MANAGER"]}>
+              <StaffList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staffs/:id"
+          element={
+            <ProtectedRoute allowedRoles={["ADMIN", "MANAGER"]}>
+              <StaffDetail />
             </ProtectedRoute>
           }
         />

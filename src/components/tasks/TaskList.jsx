@@ -70,15 +70,19 @@ function TaskList() {
   );
 
   const handleDelete = async (id) => {
-    const confirmed = await showConfirm("This will permanently remove the task.", "Delete this task?");
-    if (!confirmed) return;
-    try {
-      await taskService.deleteTask(id);
-      setTasks(tasks.filter(task => task.id !== id));
-      setOpenMenu(null);
-    } catch (err) {
-      console.error("Failed to delete task:", err);
-      showError("Failed to delete task.");
+    const confirmed = await showConfirm(
+      "This will permanently remove the task.",
+      "Delete this task?"
+    );
+
+    if (confirmed) {
+      try {
+        await taskService.deleteTask(id);
+        await fetchTasks();
+        setOpenMenu(null);
+      } catch (err) {
+        showError("Failed to delete task. Please try again.");
+      }
     }
   };
 
@@ -102,11 +106,17 @@ function TaskList() {
     return "bg-secondary";
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "No Date";
-    return new Date(dateString).toLocaleDateString();
-  };
+  const formatDate = (task) => {
+    if (task.dueDate) {
+      return new Date(task.dueDate).toLocaleDateString();
+    }
 
+    if (task.createdAt) {
+      return `Created: ${new Date(task.createdAt).toLocaleDateString()}`;
+    }
+
+    return "No Date";
+  };
   return (
     <div className="container-fluid task-list-wrapper">
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
@@ -203,7 +213,7 @@ function TaskList() {
                   <span className={`badge ${getStatusBadgeClass(task.status || task.stage)}`}>
                     {STAGE_MAP[(task.status || task.stage || "").toUpperCase()] || (task.status || task.stage)}
                   </span>
-                  <span className="small text-secondary">{formatDate(task.dueDate)}</span>
+                  <span className="small text-secondary">{formatDate(task)}</span>
 
                   <div className="position-relative">
                     <button
@@ -217,18 +227,19 @@ function TaskList() {
                     </button>
 
                     {openMenu === task.id && (
-                      <div className="position-absolute end-0 top-100 bg-white text-dark rounded shadow p-2" style={{ zIndex: 1000, minWidth: "150px" }}>
+                      <div className="position-absolute end-0 top-100 rounded shadow p-2 task-dropdown" style={{ zIndex: 1000, minWidth: "150px" }}>
 
 
 
-                        {role === "ADMIN" && (
-                          <button
-                            className="btn btn-sm btn-danger w-100 text-start"
-                            onClick={() => handleDelete(task.id)}
-                          >
-                            Delete
-                          </button>
-                        )}
+                        {["ADMIN", "MANAGER", "ROLE_ADMIN", "ROLE_MANAGER"]
+                          .includes(role?.toUpperCase()) && (
+                            <button
+                              className="btn btn-sm btn-danger w-100 text-start"
+                              onClick={() => handleDelete(task.id)}
+                            >
+                              Delete
+                            </button>
+                          )}
                       </div>
                     )}
                   </div>
@@ -251,8 +262,9 @@ function TaskList() {
             onRefresh={fetchTasks}
           />
         )
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

@@ -147,9 +147,6 @@ function Login() {
             {loading ? "Logging in..." : "Log in →"}
           </button>
 
-          <p className="signup">
-            Don't have an account? <Link to="/signup">Sign up</Link>
-          </p>
         </div>
       </div>
     </div>

@@ -17,7 +17,7 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
   if (userStr) {
     try {
       const user = JSON.parse(userStr);
-      if (!user.profileCompleted && (user.role === "MANAGER" || user.role === "EMPLOYEE")) {
+      if (!user.profileCompleted && (user.role === "MANAGER" || user.role === "EMPLOYEE" || user.role === "EMPLOYEE")) {
         if (window.location.pathname !== "/complete-profile") {
           return <Navigate to="/complete-profile" replace />;
         }
