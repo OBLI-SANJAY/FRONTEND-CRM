@@ -298,7 +298,7 @@ function LeadList({ leads: propsLeads, onRefresh, loading: parentLoading, search
                   <th>Company</th>
                   <th>Status</th>
                   <th>Email</th>
-                  <th>Last Contacted</th>
+                  <th>Created</th>
                   <th className="text-end">Actions</th>
                 </tr>
               </thead>
@@ -318,7 +318,11 @@ function LeadList({ leads: propsLeads, onRefresh, loading: parentLoading, search
                       </span>
                     </td>
                     <td>{lead.email}</td>
-                    <td>{lead.contacted}</td>
+                    <td>
+                      {lead.createdAt
+                        ? new Date(lead.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+                        : "—"}
+                    </td>
 
                     <td className="text-end position-relative">
                       <button

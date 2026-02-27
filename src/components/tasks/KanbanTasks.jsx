@@ -35,7 +35,23 @@ function KanbanTasks({ tasks: propTasks = [], onRefresh }) {
     const role = getRole();
     const currentUserEmail = getEmail();
     useEffect(() => {
-        setLocalTasks(propTasks);
+        setLocalTasks((currentLocal) => {
+            if (currentLocal.length === 0) return propTasks;
+
+            const tasksMap = new Map(propTasks.map(t => [String(t.id), t]));
+            const merged = [];
+
+            currentLocal.forEach(localTask => {
+                const updatedTask = tasksMap.get(String(localTask.id));
+                if (updatedTask) {
+                    merged.push(updatedTask);
+                    tasksMap.delete(String(localTask.id));
+                }
+            });
+
+            tasksMap.forEach(newTask => merged.push(newTask));
+            return merged;
+        });
     }, [propTasks]);
 
     const columns = useMemo(() => {
@@ -89,11 +105,32 @@ function KanbanTasks({ tasks: propTasks = [], onRefresh }) {
         }
 
         const previousTasksState = [...localTasks];
-        setLocalTasks((prev) =>
-            prev.map((task) =>
-                String(task.id) === taskId ? { ...task, status: targetStage } : task
-            )
-        );
+        setLocalTasks((prev) => {
+            const newTasks = [...prev];
+            const taskIndex = newTasks.findIndex((t) => String(t.id) === taskId);
+            if (taskIndex === -1) return prev;
+
+            const [movedTask] = newTasks.splice(taskIndex, 1);
+            movedTask.status = targetStage;
+
+            const destTasks = newTasks.filter((task) => {
+                const status = (task.status || task.stage || "TODO").toUpperCase();
+                let mappedStage = status;
+                if (status === "PENDING") mappedStage = "TODO";
+                if (status === "IN PROGRESS") mappedStage = "IN_PROGRESS";
+                if (status === "REVIEW") mappedStage = "TODO";
+                return mappedStage === targetStage;
+            });
+
+            if (destination.index < destTasks.length) {
+                const targetTask = destTasks[destination.index];
+                const insertIndex = newTasks.findIndex((t) => String(t.id) === String(targetTask.id));
+                newTasks.splice(insertIndex, 0, movedTask);
+            } else {
+                newTasks.push(movedTask);
+            }
+            return newTasks;
+        });
         setSyncError(null);
         try {
             setIsSyncing(true);

@@ -66,7 +66,7 @@ function Dashboard() {
 
   const statsByRole = {
     ADMIN: {
-      revenue: `$${dynamicStats.totalRevenue.toLocaleString()}`,
+      revenue: `₹${dynamicStats.totalRevenue.toLocaleString()}`,
       revenueTrend: "+20.1% from last month",
       clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+12 new this week",
@@ -76,7 +76,7 @@ function Dashboard() {
       conversionTrend: "-0.4% from last week",
     },
     MANAGER: {
-      revenue: `$${dynamicStats.totalRevenue.toLocaleString()}`,
+      revenue: `₹${dynamicStats.totalRevenue.toLocaleString()}`,
       revenueTrend: "+8.3% from last month",
       clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+5 new this week",
@@ -86,7 +86,7 @@ function Dashboard() {
       conversionTrend: "-0.2% from last week",
     },
     EMPLOYEE: {
-      revenue: `$${dynamicStats.totalRevenue.toLocaleString()}`,
+      revenue: `₹${dynamicStats.totalRevenue.toLocaleString()}`,
       revenueTrend: "+2.1% from last month",
       clients: dynamicStats.activeClients.toString(),
       clientsTrend: "+1 new this week",

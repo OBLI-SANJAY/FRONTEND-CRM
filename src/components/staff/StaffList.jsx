@@ -303,7 +303,6 @@ function StaffList() {
                                     <th>Email</th>
                                     <th>Role</th>
                                     <th>Phone</th>
-                                    <th>Joined</th>
                                     <th className="text-end">Actions</th>
                                 </tr>
                             </thead>
@@ -332,11 +331,6 @@ function StaffList() {
                                                 </span>
                                             </td>
                                             <td className="text-muted">{emp.phone || "—"}</td>
-                                            <td className="text-muted">
-                                                {emp.createdAt
-                                                    ? new Date(emp.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
-                                                    : "—"}
-                                            </td>
                                             <td className="text-end position-relative">
                                                 <button
                                                     className="btn btn-light btn-sm rounded-circle shadow-sm d-flex align-items-center justify-content-center"

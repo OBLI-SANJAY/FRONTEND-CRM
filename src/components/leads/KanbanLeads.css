@@ -1,6 +1,5 @@
 .kanban-wrapper {
     position: relative;
-    overflow-x: auto;
     min-height: 600px;
     padding: 1rem 0;
 }

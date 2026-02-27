@@ -27,7 +27,23 @@ function KanbanLeads({ leads: propLeads = [], onRefresh }) {
     const role = getRole();
     const currentUserEmail = getEmail();
     useEffect(() => {
-        setLocalLeads(propLeads);
+        setLocalLeads((currentLocal) => {
+            if (currentLocal.length === 0) return propLeads;
+
+            const leadsMap = new Map(propLeads.map(l => [String(l.id), l]));
+            const merged = [];
+
+            currentLocal.forEach(localLead => {
+                const updatedLead = leadsMap.get(String(localLead.id));
+                if (updatedLead) {
+                    merged.push(updatedLead);
+                    leadsMap.delete(String(localLead.id));
+                }
+            });
+
+            leadsMap.forEach(newLead => merged.push(newLead));
+            return merged;
+        });
     }, [propLeads]);
     const columns = useMemo(() => {
         const map = {};
@@ -63,11 +79,28 @@ function KanbanLeads({ leads: propLeads = [], onRefresh }) {
             return;
         }
         const previousLeadsState = [...localLeads];
-        setLocalLeads((prev) =>
-            prev.map((lead) =>
-                String(lead.id) === leadId ? { ...lead, stage: targetStage } : lead
-            )
-        );
+        setLocalLeads((prev) => {
+            const newLeads = [...prev];
+            const leadIndex = newLeads.findIndex((l) => String(l.id) === leadId);
+            if (leadIndex === -1) return prev;
+
+            const [movedLead] = newLeads.splice(leadIndex, 1);
+            movedLead.stage = targetStage;
+
+            const destLeads = newLeads.filter((lead) => {
+                const stage = (lead.stage || lead.status || "NEW").toUpperCase();
+                return stage === targetStage;
+            });
+
+            if (destination.index < destLeads.length) {
+                const targetLead = destLeads[destination.index];
+                const insertIndex = newLeads.findIndex((l) => String(l.id) === String(targetLead.id));
+                newLeads.splice(insertIndex, 0, movedLead);
+            } else {
+                newLeads.push(movedLead);
+            }
+            return newLeads;
+        });
         setSyncError(null);
         try {
             setIsSyncing(true);
@@ -148,7 +181,11 @@ function KanbanLeads({ leads: propLeads = [], onRefresh }) {
                                                                     .charAt(0)
                                                                     .toUpperCase()}
                                                             </div>
-                                                            <span className="contact-status">{lead.contacted || "Recently"}</span>
+                                                            <span className="contact-status">
+                                                                {lead.createdAt
+                                                                    ? new Date(lead.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+                                                                    : "—"}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 )}
